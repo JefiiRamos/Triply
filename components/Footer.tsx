@@ -1,7 +1,8 @@
 "use client"
 
-import { Plane } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
+import appIcon from "@/lib/images/plann.er-icon.png"
 
 export default function Footer() {
   return (
@@ -9,13 +10,14 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 lg:px-8">
         <div className="grid gap-8 md:grid-cols-4">
           <div className="md:col-span-1">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-                <Plane className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="font-heading text-xl font-bold text-foreground">
-                TravelFinder
-              </span>
+            <Link href="/" className="flex items-center">
+              <Image
+                src={appIcon}
+                alt="Plann.er"
+                width={140}
+                height={40}
+                className="h-10 w-auto object-contain"
+              />
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               Compare precos de voos e hoteis para encontrar as melhores ofertas
@@ -122,7 +124,7 @@ export default function Footer() {
 
         <div className="mt-12 border-t border-border pt-8">
           <p className="text-center text-sm text-muted-foreground">
-            {'2026 TravelFinder. Todos os direitos reservados.'}
+            {'2026 Plann.er. Todos os direitos reservados.'}
           </p>
         </div>
       </div>

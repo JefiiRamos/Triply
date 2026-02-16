@@ -2,8 +2,10 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Plane, Menu, X } from "lucide-react"
+import { Menu, X } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
+import appIcon from "@/lib/images/plann.er-icon.png"
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -16,13 +18,15 @@ export default function Navbar() {
       className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-md"
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-8">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <Plane className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <span className="font-heading text-xl font-bold text-foreground">
-            TravelFinder
-          </span>
+        <Link href="/" className="flex items-center">
+          <Image
+            src={appIcon}
+            alt="Plann.er"
+            width={140}
+            height={40}
+            className="h-10 w-auto object-contain"
+            priority
+          />
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
