@@ -27,7 +27,7 @@ export default function FeatureCardsSection() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.35 }}
-      className="relative mx-auto max-w-7xl px-4 pb-16 pt-10 lg:px-8"
+      className="relative mx-auto max-w-7xl overflow-hidden px-4 pb-16 pt-10 lg:px-8"
     >
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,hsl(213_94%_68%/0.12),transparent_62%)]" />
       <div className="pointer-events-none absolute -left-10 top-10 -z-10 h-48 w-48 rounded-full bg-primary/10 blur-3xl opacity-70" />

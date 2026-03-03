@@ -83,14 +83,14 @@ export default function ScrollHeroSection({
     : { duration: 0.45, ease: "easeOut" }
 
   return (
-    <section className="relative overflow-x-hidden pb-6 pt-16 md:pt-24">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(217_91%_60%/0.18),transparent_62%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,250,252,0.98),rgba(248,250,252,0.9),rgba(255,255,255,1))]" />
-      <div className="pointer-events-none absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/25 blur-3xl opacity-60 motion-safe:animate-pulse" />
-      <div className="pointer-events-none absolute bottom-6 right-0 h-[26rem] w-[26rem] translate-x-1/3 rounded-full bg-accent/25 blur-3xl opacity-40 motion-safe:animate-pulse" />
-      <div className="pointer-events-none absolute left-8 top-24 hidden h-64 w-64 rounded-full bg-primary/10 blur-3xl opacity-60 md:block" />
+    <section className="relative overflow-x-hidden bg-white pb-0 pt-6 md:pt-10">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-white md:h-32" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(217_91%_60%/0.06),transparent_65%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,1),rgba(248,250,252,0.92),rgba(255,255,255,1))]" />
+      <div className="pointer-events-none absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl opacity-35 motion-safe:animate-pulse" />
+      <div className="pointer-events-none absolute left-8 top-32 hidden h-64 w-64 rounded-full bg-primary/6 blur-3xl opacity-30 md:block" />
 
-      <div className="relative mx-auto flex min-h-[70vh] max-w-7xl items-start px-4 pt-10 lg:px-8 lg:pt-16">
+      <div className="relative mx-auto flex min-h-[70vh] max-w-7xl items-start px-4 pb-12 pt-6 lg:px-8 lg:pb-16 lg:pt-10">
           <div className="relative z-10 mx-auto w-full max-w-3xl text-center">
             <AnimatePresence mode="wait">
               <motion.div
@@ -132,6 +132,7 @@ export default function ScrollHeroSection({
 
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,transparent_55%,rgba(248,250,252,0.85)_100%)] opacity-80" />
       </div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(180deg,rgba(255,255,255,0),rgba(248,250,252,0.9),rgba(248,250,252,1))]" />
     </section>
   )
 }
