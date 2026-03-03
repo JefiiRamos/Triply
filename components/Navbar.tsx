@@ -78,7 +78,7 @@ export default function Navbar() {
             <div className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.10),transparent_60%)]" />
             <div className="relative flex items-center rounded-full border border-border/60 bg-white/70 p-1 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.35)] backdrop-blur-xl">
               <Link
-                href="/"
+                href="/login"
                 className="group relative inline-flex items-center justify-center rounded-full bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground
                            shadow-[0_14px_30px_-18px_rgba(37,99,235,0.55)] transition
                            hover:-translate-y-0.5 hover:bg-primary/90"
@@ -128,7 +128,7 @@ export default function Navbar() {
               ))}
 
               <Link
-                href="/"
+                href="/login"
                 className="mt-1 rounded-xl bg-primary px-5 py-2.5 text-center text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
                 onClick={() => setMobileOpen(false)}
               >
