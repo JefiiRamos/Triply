@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Plane } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { type Flight } from "@/components/FlightCard"
@@ -38,6 +39,7 @@ export default function Page() {
   const loadingTypingTimeoutRef = useRef<number | null>(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const storageKey = "planair:user"
+  const router = useRouter()
 
   const resultsTitle =
     "Os resultados que conseguimos encontrar foram estes:"
@@ -73,6 +75,9 @@ export default function Page() {
     }
 
     readUser()
+    if (window.localStorage.getItem(storageKey)) {
+      router.replace("/home")
+    }
     const handleAuthChange = () => readUser()
     window.addEventListener("planair-auth-change", handleAuthChange)
     window.addEventListener("storage", handleAuthChange)
@@ -81,7 +86,7 @@ export default function Page() {
       window.removeEventListener("planair-auth-change", handleAuthChange)
       window.removeEventListener("storage", handleAuthChange)
     }
-  }, [storageKey])
+  }, [router, storageKey])
 
   useEffect(() => {
     if (typingTimeoutRef.current) {
