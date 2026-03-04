@@ -2,9 +2,11 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Lock, Mail, User } from "lucide-react"
+import { Eye, EyeOff, Lock, Mail, User } from "lucide-react"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
+import { Toaster } from "@/components/ui/toaster"
+import { toast } from "@/hooks/use-toast"
 
 export default function LoginPage() {
   const [mode, setMode] = useState<"login" | "register">("login")
@@ -12,6 +14,105 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [name, setName] = useState("")
   const [passwordConfirm, setPasswordConfirm] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showLoginPassword, setShowLoginPassword] = useState(false)
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false)
+  const [showRegisterPasswordConfirm, setShowRegisterPasswordConfirm] =
+    useState(false)
+
+  const mockAccount = {
+    email: "jeferson@gmail.com",
+    password: "admin123",
+  }
+
+  const handleLogin = async () => {
+    if (isSubmitting) return
+    const normalizedEmail = email.trim().toLowerCase()
+
+    if (!normalizedEmail || !password) {
+      toast({
+        title: "Preencha os dados",
+        description: "Informe email e senha para continuar.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsSubmitting(true)
+    await new Promise((resolve) => setTimeout(resolve, 650))
+
+    const isValid =
+      normalizedEmail === mockAccount.email && password === mockAccount.password
+
+    if (isValid) {
+      toast({
+        title: "Login realizado!",
+        description: "Bem-vindo de volta. Seu acesso foi liberado.",
+      })
+    } else {
+      toast({
+        title: "Nao foi possivel entrar",
+        description: "Confira seu email e senha e tente novamente.",
+        variant: "destructive",
+      })
+    }
+
+    setIsSubmitting(false)
+  }
+
+  const handleRegister = async () => {
+    if (isSubmitting) return
+    const normalizedEmail = email.trim().toLowerCase()
+
+    if (!name.trim() || !normalizedEmail || !password || !passwordConfirm) {
+      toast({
+        title: "Dados incompletos",
+        description: "Preencha todos os campos para criar sua conta.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (password.length < 6) {
+      toast({
+        title: "Senha muito curta",
+        description: "Use ao menos 6 caracteres.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (password !== passwordConfirm) {
+      toast({
+        title: "Senhas diferentes",
+        description: "As senhas precisam ser iguais.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (normalizedEmail === mockAccount.email) {
+      toast({
+        title: "Email ja cadastrado",
+        description: "Use outro email ou faca login.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsSubmitting(true)
+    await new Promise((resolve) => setTimeout(resolve, 650))
+
+    toast({
+      title: "Conta criada com sucesso!",
+      description: "Agora voce pode entrar com seu novo acesso.",
+    })
+
+    setMode("login")
+    setPassword("")
+    setPasswordConfirm("")
+    setIsSubmitting(false)
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
@@ -54,7 +155,7 @@ export default function LoginPage() {
                       <div className="mt-8 space-y-4">
                         <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                           Email
-                          <div className="flex items-center gap-3 rounded-xl border border-border bg-white/80 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)]">
+                          <div className="flex items-center gap-3 rounded-xl border border-border bg-white/80 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)] transition focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/30 focus-within:shadow-[0_18px_50px_-32px_rgba(37,99,235,0.45)]">
                             <Mail className="h-4 w-4 text-primary" />
                             <input
                               type="email"
@@ -68,15 +169,33 @@ export default function LoginPage() {
 
                         <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                           Senha
-                          <div className="flex items-center gap-3 rounded-xl border border-border bg-white/80 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)]">
+                          <div className="flex items-center gap-3 rounded-xl border border-border bg-white/80 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)] transition focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/30 focus-within:shadow-[0_18px_50px_-32px_rgba(37,99,235,0.45)]">
                             <Lock className="h-4 w-4 text-primary" />
                             <input
-                              type="password"
+                              type={showLoginPassword ? "text" : "password"}
                               value={password}
                               onChange={(e) => setPassword(e.target.value)}
                               placeholder="Digite sua senha"
                               className="w-full bg-transparent outline-none placeholder:text-muted-foreground"
                             />
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setShowLoginPassword((current) => !current)
+                              }
+                              className="text-muted-foreground transition hover:text-primary"
+                              aria-label={
+                                showLoginPassword
+                                  ? "Ocultar senha"
+                                  : "Mostrar senha"
+                              }
+                            >
+                              {showLoginPassword ? (
+                                <EyeOff className="h-4 w-4" />
+                              ) : (
+                                <Eye className="h-4 w-4" />
+                              )}
+                            </button>
                           </div>
                         </label>
                       </div>
@@ -99,9 +218,11 @@ export default function LoginPage() {
 
                       <button
                         type="button"
+                        onClick={handleLogin}
+                        disabled={isSubmitting}
                         className="mt-6 w-full rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_18px_40px_-22px_rgba(37,99,235,0.6)] transition hover:-translate-y-0.5 hover:bg-primary/90"
                       >
-                        Entrar
+                        {isSubmitting ? "Entrando..." : "Entrar"}
                       </button>
                     </motion.div>
                   ) : (
@@ -218,7 +339,7 @@ export default function LoginPage() {
                       <div className="mt-8 space-y-4">
                         <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                           Nome completo
-                          <div className="flex items-center gap-3 rounded-xl border border-border bg-white/80 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)]">
+                          <div className="flex items-center gap-3 rounded-xl border border-border bg-white/80 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)] transition focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/30 focus-within:shadow-[0_18px_50px_-32px_rgba(37,99,235,0.45)]">
                             <User className="h-4 w-4 text-primary" />
                             <input
                               type="text"
@@ -232,7 +353,7 @@ export default function LoginPage() {
 
                         <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                           Email
-                          <div className="flex items-center gap-3 rounded-xl border border-border bg-white/80 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)]">
+                          <div className="flex items-center gap-3 rounded-xl border border-border bg-white/80 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)] transition focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/30 focus-within:shadow-[0_18px_50px_-32px_rgba(37,99,235,0.45)]">
                             <Mail className="h-4 w-4 text-primary" />
                             <input
                               type="email"
@@ -246,38 +367,80 @@ export default function LoginPage() {
 
                         <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                           Senha
-                          <div className="flex items-center gap-3 rounded-xl border border-border bg-white/80 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)]">
+                          <div className="flex items-center gap-3 rounded-xl border border-border bg-white/80 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)] transition focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/30 focus-within:shadow-[0_18px_50px_-32px_rgba(37,99,235,0.45)]">
                             <Lock className="h-4 w-4 text-primary" />
                             <input
-                              type="password"
+                              type={showRegisterPassword ? "text" : "password"}
                               value={password}
                               onChange={(e) => setPassword(e.target.value)}
                               placeholder="Crie uma senha"
                               className="w-full bg-transparent outline-none placeholder:text-muted-foreground"
                             />
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setShowRegisterPassword((current) => !current)
+                              }
+                              className="text-muted-foreground transition hover:text-primary"
+                              aria-label={
+                                showRegisterPassword
+                                  ? "Ocultar senha"
+                                  : "Mostrar senha"
+                              }
+                            >
+                              {showRegisterPassword ? (
+                                <EyeOff className="h-4 w-4" />
+                              ) : (
+                                <Eye className="h-4 w-4" />
+                              )}
+                            </button>
                           </div>
                         </label>
 
                         <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                           Confirmar senha
-                          <div className="flex items-center gap-3 rounded-xl border border-border bg-white/80 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)]">
+                          <div className="flex items-center gap-3 rounded-xl border border-border bg-white/80 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.35)] transition focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/30 focus-within:shadow-[0_18px_50px_-32px_rgba(37,99,235,0.45)]">
                             <Lock className="h-4 w-4 text-primary" />
                             <input
-                              type="password"
+                              type={
+                                showRegisterPasswordConfirm
+                                  ? "text"
+                                  : "password"
+                              }
                               value={passwordConfirm}
                               onChange={(e) => setPasswordConfirm(e.target.value)}
                               placeholder="Repita a senha"
                               className="w-full bg-transparent outline-none placeholder:text-muted-foreground"
                             />
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setShowRegisterPasswordConfirm((current) => !current)
+                              }
+                              className="text-muted-foreground transition hover:text-primary"
+                              aria-label={
+                                showRegisterPasswordConfirm
+                                  ? "Ocultar senha"
+                                  : "Mostrar senha"
+                              }
+                            >
+                              {showRegisterPasswordConfirm ? (
+                                <EyeOff className="h-4 w-4" />
+                              ) : (
+                                <Eye className="h-4 w-4" />
+                              )}
+                            </button>
                           </div>
                         </label>
                       </div>
 
                       <button
                         type="button"
+                        onClick={handleRegister}
+                        disabled={isSubmitting}
                         className="mt-6 w-full rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_18px_40px_-22px_rgba(37,99,235,0.6)] transition hover:-translate-y-0.5 hover:bg-primary/90"
                       >
-                        Criar conta
+                        {isSubmitting ? "Criando conta..." : "Criar conta"}
                       </button>
                     </motion.div>
                   )}
@@ -289,6 +452,7 @@ export default function LoginPage() {
       </main>
 
       <Footer />
+      <Toaster />
     </div>
   )
 }
