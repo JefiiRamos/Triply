@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react"
 import Navbar from "@/components/Navbar"
@@ -9,6 +10,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { toast } from "@/hooks/use-toast"
 
 export default function LoginPage() {
+  const router = useRouter()
   const [mode, setMode] = useState<"login" | "register">("login")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -21,9 +23,11 @@ export default function LoginPage() {
     useState(false)
 
   const mockAccount = {
+    name: "Jeferson",
     email: "jeferson@gmail.com",
     password: "admin123",
   }
+  const storageKey = "planair:user"
 
   const handleLogin = async () => {
     if (isSubmitting) return
@@ -45,10 +49,18 @@ export default function LoginPage() {
       normalizedEmail === mockAccount.email && password === mockAccount.password
 
     if (isValid) {
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify({ name: mockAccount.name, email: mockAccount.email }),
+      )
+      window.dispatchEvent(new Event("planair-auth-change"))
+
       toast({
         title: "Login realizado!",
         description: "Bem-vindo de volta. Seu acesso foi liberado.",
       })
+
+      router.push("/")
     } else {
       toast({
         title: "Nao foi possivel entrar",

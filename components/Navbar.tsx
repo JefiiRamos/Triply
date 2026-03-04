@@ -1,14 +1,49 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X } from "lucide-react"
+import { CircleUser, Menu, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import appIcon from "@/lib/images/plann.er-icon.png"
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [user, setUser] = useState<{ name: string; email: string } | null>(null)
+  const storageKey = "planair:user"
+
+  useEffect(() => {
+    const readUser = () => {
+      const raw = window.localStorage.getItem(storageKey)
+      if (!raw) {
+        setUser(null)
+        return
+      }
+
+      try {
+        const parsed = JSON.parse(raw) as { name?: string; email?: string }
+        if (parsed?.name) {
+          setUser({ name: parsed.name, email: parsed.email ?? "" })
+          return
+        }
+      } catch {
+        // ignore invalid data
+      }
+
+      setUser(null)
+    }
+
+    readUser()
+
+    const handleAuthChange = () => readUser()
+    window.addEventListener("planair-auth-change", handleAuthChange)
+    window.addEventListener("storage", handleAuthChange)
+
+    return () => {
+      window.removeEventListener("planair-auth-change", handleAuthChange)
+      window.removeEventListener("storage", handleAuthChange)
+    }
+  }, [storageKey])
 
   return (
     <motion.header
@@ -73,19 +108,28 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Right pill: Enter */}
+          {/* Right pill: Enter / User */}
           <div className="relative">
             <div className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.10),transparent_60%)]" />
             <div className="relative flex items-center rounded-full border border-border/60 bg-white/70 p-1 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.35)] backdrop-blur-xl">
-              <Link
-                href="/login"
-                className="group relative inline-flex items-center justify-center rounded-full bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground
-                           shadow-[0_14px_30px_-18px_rgba(37,99,235,0.55)] transition
-                           hover:-translate-y-0.5 hover:bg-primary/90"
-              >
-                <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.35),transparent_55%)] opacity-0 transition-opacity group-hover:opacity-100" />
-                <span className="relative">Entrar</span>
-              </Link>
+              {user ? (
+                <div className="flex items-center gap-3 rounded-full bg-white/80 px-4 py-2 text-xs font-semibold text-foreground">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <CircleUser className="h-4 w-4" />
+                  </span>
+                  <span className="max-w-[160px] truncate">{user.name}</span>
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  className="group relative inline-flex items-center justify-center rounded-full bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground
+                             shadow-[0_14px_30px_-18px_rgba(37,99,235,0.55)] transition
+                             hover:-translate-y-0.5 hover:bg-primary/90"
+                >
+                  <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.35),transparent_55%)] opacity-0 transition-opacity group-hover:opacity-100" />
+                  <span className="relative">Entrar</span>
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -127,13 +171,22 @@ export default function Navbar() {
                 </Link>
               ))}
 
-              <Link
-                href="/login"
-                className="mt-1 rounded-xl bg-primary px-5 py-2.5 text-center text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
-                onClick={() => setMobileOpen(false)}
-              >
-                Entrar
-              </Link>
+              {user ? (
+                <div className="mt-1 flex items-center gap-3 rounded-xl border border-border/60 bg-white/80 px-4 py-2 text-sm font-semibold text-foreground">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <CircleUser className="h-4 w-4" />
+                  </span>
+                  <span className="truncate">{user.name}</span>
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  className="mt-1 rounded-xl bg-primary px-5 py-2.5 text-center text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Entrar
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
