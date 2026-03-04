@@ -1,49 +1,63 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { CircleUser, Menu, X } from "lucide-react"
+import {
+  Bell,
+  CircleUser,
+  Clock,
+  Heart,
+  HelpCircle,
+  LogOut,
+  Menu,
+  MoreHorizontal,
+  Plane,
+  Settings,
+  Sparkles,
+  User,
+  X,
+} from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import appIcon from "@/lib/images/plann.er-icon.png"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null)
-  const storageKey = "planair:user"
+  const isLoggedIn = true
+  const user = { name: "Jeferson", plan: "free" as const }
+  const unreadAlertsCount = 2
 
-  useEffect(() => {
-    const readUser = () => {
-      const raw = window.localStorage.getItem(storageKey)
-      if (!raw) {
-        setUser(null)
-        return
-      }
+  const notifications = [
+    "Preco caiu em SP → Lisboa",
+    "Nova oferta para Rio → Santiago",
+    "Alerta ativado para Curitiba → Recife",
+    "Voo direto disponivel para Madrid",
+  ]
 
-      try {
-        const parsed = JSON.parse(raw) as { name?: string; email?: string }
-        if (parsed?.name) {
-          setUser({ name: parsed.name, email: parsed.email ?? "" })
-          return
-        }
-      } catch {
-        // ignore invalid data
-      }
+  const navItems = [
+    { label: "Voos", href: "/home" },
+    { label: "Hoteis", href: "/hotels" },
+    { label: "Ofertas", href: "/deals" },
+  ]
 
-      setUser(null)
-    }
+  const extraItems = [
+    { label: "Favoritos", href: "/favorites" },
+    { label: "Alertas", href: "/alerts" },
+  ]
 
-    readUser()
-
-    const handleAuthChange = () => readUser()
-    window.addEventListener("planair-auth-change", handleAuthChange)
-    window.addEventListener("storage", handleAuthChange)
-
-    return () => {
-      window.removeEventListener("planair-auth-change", handleAuthChange)
-      window.removeEventListener("storage", handleAuthChange)
-    }
-  }, [storageKey])
+  function handleSignOut() {
+    // mock sign out
+    console.log("sign out")
+  }
 
   return (
     <motion.header
@@ -91,11 +105,7 @@ export default function Navbar() {
           <div className="relative mx-auto">
             <div className="pointer-events-none absolute -inset-px rounded-full bg-gradient-to-r from-primary/15 via-primary/5 to-primary/15 opacity-70" />
             <div className="relative flex items-center gap-1 rounded-full border border-border/60 bg-white/70 p-1 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.35)] backdrop-blur-xl">
-              {[
-                { label: "Voos", href: "/" },
-                { label: "Hoteis", href: "/" },
-                { label: "Ofertas", href: "/" },
-              ].map((item) => (
+              {navItems.map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
@@ -105,6 +115,39 @@ export default function Navbar() {
                   {item.label}
                 </Link>
               ))}
+              {isLoggedIn && (
+                <>
+                  {extraItems.map((item) => (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className="hidden rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground transition
+                                 hover:bg-white/70 hover:text-foreground lg:inline-flex"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground transition hover:bg-white/70 hover:text-foreground lg:hidden"
+                        aria-label="Mais opcoes"
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
+                        Mais
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="center">
+                      {extraItems.map((item) => (
+                        <DropdownMenuItem key={item.label} asChild>
+                          <Link href={item.href}>{item.label}</Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </>
+              )}
             </div>
           </div>
 
@@ -112,12 +155,131 @@ export default function Navbar() {
           <div className="relative">
             <div className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.10),transparent_60%)]" />
             <div className="relative flex items-center rounded-full border border-border/60 bg-white/70 p-1 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.35)] backdrop-blur-xl">
-              {user ? (
-                <div className="flex items-center gap-3 rounded-full bg-white/80 px-4 py-2 text-xs font-semibold text-foreground">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
-                    <CircleUser className="h-4 w-4" />
-                  </span>
-                  <span className="max-w-[160px] truncate">{user.name}</span>
+              {isLoggedIn ? (
+                <div className="flex items-center gap-2">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        type="button"
+                        className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/60 bg-white/80 text-primary shadow-[0_10px_30px_-20px_rgba(15,23,42,0.3)] transition hover:-translate-y-0.5"
+                        aria-label="Notificacoes"
+                      >
+                        <Bell className="h-4 w-4" />
+                        {unreadAlertsCount > 0 && (
+                          <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-primary" />
+                        )}
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-64">
+                      <div className="px-2 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                        Notificacoes
+                      </div>
+                      <DropdownMenuSeparator />
+                      {notifications.length === 0 ? (
+                        <div className="px-2 py-2 text-sm text-muted-foreground">
+                          Nenhuma atualizacao por enquanto.
+                        </div>
+                      ) : (
+                        notifications.slice(0, 5).map((item) => (
+                          <DropdownMenuItem key={item} className="text-sm">
+                            {item}
+                          </DropdownMenuItem>
+                        ))
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        type="button"
+                        className="flex items-center gap-3 rounded-full bg-white/80 px-4 py-2 text-xs font-semibold text-foreground transition hover:-translate-y-0.5"
+                        aria-label="Menu do usuario"
+                      >
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                          <CircleUser className="h-4 w-4" />
+                        </span>
+                        <span className="max-w-[140px] truncate">
+                          {user.name}
+                        </span>
+                        {user.plan === "premium" && (
+                          <Badge className="rounded-full text-[10px]">PRO</Badge>
+                        )}
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      <div className="px-2 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                        Conta
+                      </div>
+                      <DropdownMenuItem asChild>
+                        <Link href="/profile">
+                          <User className="mr-2 h-4 w-4" />
+                          Meu perfil
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/trips">
+                          <Plane className="mr-2 h-4 w-4" />
+                          Minhas viagens
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/history">
+                          <Clock className="mr-2 h-4 w-4" />
+                          Historico de pesquisas
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <div className="px-2 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                        Organizacao
+                      </div>
+                      <DropdownMenuItem asChild>
+                        <Link href="/favorites">
+                          <Heart className="mr-2 h-4 w-4" />
+                          Favoritos
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/alerts">
+                          <Bell className="mr-2 h-4 w-4" />
+                          Alertas de preco
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <div className="px-2 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                        Premium
+                      </div>
+                      <DropdownMenuItem asChild>
+                        <Link href="/premium">
+                          <Sparkles className="mr-2 h-4 w-4 text-primary" />
+                          Triply Premium
+                          <Badge className="ml-auto rounded-full text-[10px]">
+                            PRO
+                          </Badge>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <div className="px-2 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                        Sistema
+                      </div>
+                      <DropdownMenuItem asChild>
+                        <Link href="/settings">
+                          <Settings className="mr-2 h-4 w-4" />
+                          Configuracoes
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/help">
+                          <HelpCircle className="mr-2 h-4 w-4" />
+                          Central de ajuda
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onSelect={handleSignOut}>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Sair
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               ) : (
                 <Link
@@ -156,9 +318,15 @@ export default function Navbar() {
           >
             <div className="flex flex-col gap-2 rounded-2xl border border-border/60 bg-white/80 p-4 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.35)] backdrop-blur-xl">
               {[
-                { label: "Voos", href: "/" },
-                { label: "Hoteis", href: "/" },
-                { label: "Ofertas", href: "/" },
+                { label: "Voos", href: "/home" },
+                { label: "Hoteis", href: "/hotels" },
+                { label: "Ofertas", href: "/deals" },
+                ...(isLoggedIn
+                  ? [
+                      { label: "Favoritos", href: "/favorites" },
+                      { label: "Alertas", href: "/alerts" },
+                    ]
+                  : []),
               ].map((item) => (
                 <Link
                   key={item.label}
@@ -171,12 +339,22 @@ export default function Navbar() {
                 </Link>
               ))}
 
-              {user ? (
-                <div className="mt-1 flex items-center gap-3 rounded-xl border border-border/60 bg-white/80 px-4 py-2 text-sm font-semibold text-foreground">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
-                    <CircleUser className="h-4 w-4" />
-                  </span>
-                  <span className="truncate">{user.name}</span>
+              {isLoggedIn ? (
+                <div className="mt-1 flex flex-col gap-2 rounded-xl border border-border/60 bg-white/80 px-4 py-3 text-sm font-semibold text-foreground">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <CircleUser className="h-4 w-4" />
+                    </span>
+                    <span className="truncate">{user.name}</span>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl"
+                    onClick={handleSignOut}
+                  >
+                    Sair
+                  </Button>
                 </div>
               ) : (
                 <Link
