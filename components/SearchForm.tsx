@@ -107,7 +107,6 @@ export default function SearchForm({
           </div>
         </div>
 
-        {/* Body */}
         <div className="px-6 py-6 md:px-8 md:py-8">
           <div className="grid gap-4 md:grid-cols-12">
             {/* Origem */}
