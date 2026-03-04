@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Plane } from "lucide-react"
+import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { type Flight } from "@/components/FlightCard"
@@ -35,6 +36,8 @@ export default function Page() {
   const hasAutoScrolledRef = useRef(false)
   const typingTimeoutRef = useRef<number | null>(null)
   const loadingTypingTimeoutRef = useRef<number | null>(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const storageKey = "planair:user"
 
   const resultsTitle =
     "Os resultados que conseguimos encontrar foram estes:"
@@ -52,6 +55,33 @@ export default function Page() {
       })
     })
   }, [hasSearched])
+
+  useEffect(() => {
+    const readUser = () => {
+      const raw = window.localStorage.getItem(storageKey)
+      if (!raw) {
+        setIsLoggedIn(false)
+        return
+      }
+
+      try {
+        const parsed = JSON.parse(raw) as { email?: string }
+        setIsLoggedIn(Boolean(parsed?.email))
+      } catch {
+        setIsLoggedIn(false)
+      }
+    }
+
+    readUser()
+    const handleAuthChange = () => readUser()
+    window.addEventListener("planair-auth-change", handleAuthChange)
+    window.addEventListener("storage", handleAuthChange)
+
+    return () => {
+      window.removeEventListener("planair-auth-change", handleAuthChange)
+      window.removeEventListener("storage", handleAuthChange)
+    }
+  }, [storageKey])
 
   useEffect(() => {
     if (typingTimeoutRef.current) {
@@ -304,6 +334,37 @@ export default function Page() {
                   </motion.div>
                 </div>
               </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {!isLoading && hasSearched && !isLoggedIn && (
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="mx-auto w-full max-w-7xl px-4 pb-6 lg:px-8"
+            >
+              <Link
+                href="/login"
+                className="group flex flex-col items-start justify-between gap-4 rounded-2xl border border-border/50 bg-white/60 p-4 text-left shadow-[0_12px_40px_-36px_rgba(15,23,42,0.22)] backdrop-blur-md transition hover:-translate-y-0.5 hover:border-primary/25 md:flex-row md:items-center md:p-5"
+              >
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-primary/60">
+                    Salve sua pesquisa
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-foreground md:text-base">
+                    Quer salvar essa pesquisa? Faca login em nossa plataforma
+                    para ver suas pesquisas recentes e poder salvar quantas
+                    viagens voce quiser!
+                  </p>
+                </div>
+                <span className="inline-flex items-center justify-center rounded-xl bg-primary/90 px-4 py-2.5 text-xs font-semibold text-primary-foreground shadow-[0_12px_28px_-18px_rgba(37,99,235,0.45)] transition group-hover:bg-primary">
+                  Fazer login
+                </span>
+              </Link>
             </motion.div>
           )}
         </AnimatePresence>
