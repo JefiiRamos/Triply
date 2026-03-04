@@ -13,7 +13,7 @@ export default function Footer() {
             <Link href="/" className="flex items-center">
               <Image
                 src={appIcon}
-                alt="Plann.er"
+                alt="Triply"
                 width={140}
                 height={40}
                 className="h-10 w-auto object-contain"
@@ -124,7 +124,7 @@ export default function Footer() {
 
         <div className="mt-12 border-t border-border pt-8">
           <p className="text-center text-sm text-muted-foreground">
-            {'2026 Plann.er. Todos os direitos reservados.'}
+            {'2026 Triply. Todos os direitos reservados.'}
           </p>
         </div>
       </div>

@@ -26,7 +26,7 @@ export default function HotelCard({ hotel, index }: HotelCardProps) {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
       whileHover={{ y: -4, boxShadow: "0 20px 40px -12px rgba(59, 130, 246, 0.15)" }}
-      className="group overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all"
+      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all"
     >
       <div className="relative h-48 overflow-hidden">
         <Image
@@ -41,7 +41,7 @@ export default function HotelCard({ hotel, index }: HotelCardProps) {
         </div>
       </div>
 
-      <div className="p-5">
+      <div className="flex flex-1 flex-col p-5">
         <h3 className="font-heading text-lg font-bold text-foreground">{hotel.name}</h3>
         <div className="mt-1.5 flex items-center gap-1 text-sm text-muted-foreground">
           <MapPin className="h-3.5 w-3.5" />
@@ -51,7 +51,7 @@ export default function HotelCard({ hotel, index }: HotelCardProps) {
           {hotel.reviewCount} avaliacoes
         </p>
 
-        <div className="mt-4 flex items-end justify-between">
+        <div className="mt-auto flex items-end justify-between pt-4">
           <div>
             <p className="font-heading text-2xl font-bold text-primary">
               {"R$ " + hotel.pricePerNight.toLocaleString("pt-BR")}

@@ -43,24 +43,21 @@ export default function SearchFormSection({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="rounded-2xl border border-border/80 bg-card/85 p-6 shadow-[0_20px_80px_-50px_rgba(15,23,42,0.3)] backdrop-blur-xl"
         >
-          <div className="rounded-xl border border-border/60 bg-background/70 p-4">
-            <SearchForm
-              origin={origin}
-              setOrigin={setOrigin}
-              destination={destination}
-              setDestination={setDestination}
-              dateFrom={dateFrom}
-              setDateFrom={setDateFrom}
-              dateTo={dateTo}
-              setDateTo={setDateTo}
-              passengers={passengers}
-              setPassengers={setPassengers}
-              onSearch={onSearch}
-              isLoading={isLoading}
-            />
-          </div>
+          <SearchForm
+            origin={origin}
+            setOrigin={setOrigin}
+            destination={destination}
+            setDestination={setDestination}
+            dateFrom={dateFrom}
+            setDateFrom={setDateFrom}
+            dateTo={dateTo}
+            setDateTo={setDateTo}
+            passengers={passengers}
+            setPassengers={setPassengers}
+            onSearch={onSearch}
+            isLoading={isLoading}
+          />
         </motion.div>
       </div>
     </section>

@@ -60,7 +60,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center md:hidden">
           <Image
             src={appIcon}
-            alt="Plann.er"
+            alt="Triply"
             width={120}
             height={36}
             className="h-9 w-auto object-contain"
@@ -77,7 +77,7 @@ export default function Navbar() {
               <Link href="/" className="flex items-center gap-2">
                 <Image
                   src={appIcon}
-                  alt="Plann.er"
+                  alt="Triply"
                   width={120}
                   height={36}
                   className="h-8 w-auto object-contain"

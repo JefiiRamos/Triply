@@ -26,7 +26,7 @@ export default function FlightCard({ flight, index }: FlightCardProps) {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
       whileHover={{ y: -4, boxShadow: "0 20px 40px -12px rgba(59, 130, 246, 0.15)" }}
-      className="group rounded-2xl border border-border bg-card p-6 shadow-sm transition-all"
+      className="group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all"
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -70,7 +70,7 @@ export default function FlightCard({ flight, index }: FlightCardProps) {
       <motion.button
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary/10 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary/10 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground md:mt-auto"
       >
         Ver oferta
         <ArrowRight className="h-4 w-4" />

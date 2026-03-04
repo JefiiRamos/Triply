@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-dm-sans' })
 
 export const metadata: Metadata = {
-  title: 'Plann.er - Descubra voos e hoteis pelo melhor preco',
+  title: 'Triply - Descubra voos e hoteis pelo melhor preco',
   description:
     'Compare precos de voos e hoteis e encontre sua proxima viagem pagando menos. Busque as melhores ofertas em tempo real.',
   icons: {
