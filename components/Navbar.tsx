@@ -142,6 +142,7 @@ export default function Navbar() {
                 <Link
                   key={item.label}
                   href={item.href}
+                  scroll={false}
                   className="rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground transition
                              hover:bg-white/70 hover:text-foreground"
                 >
@@ -154,6 +155,7 @@ export default function Navbar() {
                     <Link
                       key={item.label}
                       href={item.href}
+                      scroll={false}
                       className="hidden rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground transition
                                  hover:bg-white/70 hover:text-foreground lg:inline-flex"
                     >
@@ -174,9 +176,11 @@ export default function Navbar() {
                     <DropdownMenuContent align="center">
                       {extraItems.map((item) => (
                         <DropdownMenuItem key={item.label} asChild>
-                          <Link href={item.href}>{item.label}</Link>
-                        </DropdownMenuItem>
-                      ))}
+                        <Link href={item.href} scroll={false}>
+                          {item.label}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </>
@@ -365,6 +369,7 @@ export default function Navbar() {
                 <Link
                   key={item.label}
                   href={item.href}
+                  scroll={false}
                   className="rounded-xl px-3 py-2 text-sm font-medium text-muted-foreground transition
                              hover:bg-white/70 hover:text-foreground"
                   onClick={() => setMobileOpen(false)}

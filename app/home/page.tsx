@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import {
   Bell,
   Calendar,
@@ -175,8 +175,22 @@ export default function HomePage() {
     return recentSearches?.[0] ?? null
   }, [recentSearches])
 
-  const resultsTitle =
-    "Os resultados que conseguimos encontrar foram estes:"
+  const resultsTitle = useMemo(() => {
+    switch (activeFilter) {
+      case "voos":
+        return "Os voos que encontramos para voce foram estes:"
+      case "hoteis":
+        return "Os hoteis que encontramos para voce foram estes:"
+      case "ofertas":
+        return "As ofertas que selecionamos para voce foram estas:"
+      case "favoritos":
+        return "Suas rotas favoritas em destaque:"
+      case "alertas":
+        return "Seus alertas ativos no momento:"
+      default:
+        return "Os resultados que conseguimos encontrar foram estes:"
+    }
+  }, [activeFilter])
   const loadingTitle = "Estamos reunindo as melhores oportunidades para voce."
 
   useEffect(() => {
@@ -745,92 +759,114 @@ export default function HomePage() {
               </motion.div>
             </section>
 
-            <section className="mx-auto w-full max-w-7xl px-4 pb-16 lg:px-8">
-              {isLoading ? (
-                <ResultsSkeleton />
-              ) : activeFilter === "voos" ? (
-                <ResultsSection flights={flights} hotels={[]} />
-              ) : activeFilter === "hoteis" ? (
-                <ResultsSection flights={[]} hotels={hotels} />
-              ) : (
-                <ResultsSection flights={flights} hotels={hotels} />
-              )}
-            </section>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`results-${activeFilter}`}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              >
+                <section className="mx-auto w-full max-w-7xl px-4 pb-16 lg:px-8">
+                  {isLoading ? (
+                    <ResultsSkeleton />
+                  ) : activeFilter === "voos" ? (
+                    <ResultsSection flights={flights} hotels={[]} />
+                  ) : activeFilter === "hoteis" ? (
+                    <ResultsSection flights={[]} hotels={hotels} />
+                  ) : (
+                    <ResultsSection flights={flights} hotels={hotels} />
+                  )}
+                </section>
+              </motion.div>
+            </AnimatePresence>
           </>
         )}
 
-        {!hasSearched && activeFilter === "tudo" && (
-          <section className="mx-auto w-full max-w-7xl space-y-10 px-4 pb-16 lg:px-8">
-            <RecentSearches
-              items={recentSearches}
-              onRepeat={handleRepeatSearch}
-              onRemove={handleRemoveRecent}
-              onAddFavorite={handleAddFavorite}
-            />
-            <DailyDeals
-              deals={dailyDeals}
-              isLoadingDeals={false}
-              onPickDeal={handlePickDeal}
-              onAddFavorite={handleAddFavorite}
-            />
-            <PopularDestinations
-              items={popularDestinations}
-              onSelect={handlePickDestination}
-            />
-            <Favorites items={favorites} onRemove={handleRemoveFavorite} />
-            <PriceAlerts
-              origin={origin}
-              destination={destination}
-              alerts={alerts}
-              onCreate={handleCreateAlert}
-              onToggle={handleToggleAlert}
-              onRemove={handleRemoveAlert}
-            />
-            <Recommendations
-              personalized={personalizedRecommendations}
-              general={generalSuggestions}
-            />
-            <PremiumBanner />
-          </section>
-        )}
+        {!hasSearched && (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`filters-${activeFilter}`}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            >
+              {activeFilter === "tudo" && (
+                <section className="mx-auto w-full max-w-7xl space-y-10 px-4 pb-16 lg:px-8">
+                  <RecentSearches
+                    items={recentSearches}
+                    onRepeat={handleRepeatSearch}
+                    onRemove={handleRemoveRecent}
+                    onAddFavorite={handleAddFavorite}
+                  />
+                  <DailyDeals
+                    deals={dailyDeals}
+                    isLoadingDeals={false}
+                    onPickDeal={handlePickDeal}
+                    onAddFavorite={handleAddFavorite}
+                  />
+                  <PopularDestinations
+                    items={popularDestinations}
+                    onSelect={handlePickDestination}
+                  />
+                  <Favorites items={favorites} onRemove={handleRemoveFavorite} />
+                  <PriceAlerts
+                    origin={origin}
+                    destination={destination}
+                    alerts={alerts}
+                    onCreate={handleCreateAlert}
+                    onToggle={handleToggleAlert}
+                    onRemove={handleRemoveAlert}
+                  />
+                  <Recommendations
+                    personalized={personalizedRecommendations}
+                    general={generalSuggestions}
+                  />
+                  <PremiumBanner />
+                </section>
+              )}
 
-        {!hasSearched && activeFilter === "ofertas" && (
-          <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
-            <DailyDeals
-              deals={dailyDeals}
-              isLoadingDeals={false}
-              onPickDeal={handlePickDeal}
-              onAddFavorite={handleAddFavorite}
-            />
-          </section>
-        )}
+              {activeFilter === "ofertas" && (
+                <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
+                  <DailyDeals
+                    deals={dailyDeals}
+                    isLoadingDeals={false}
+                    onPickDeal={handlePickDeal}
+                    onAddFavorite={handleAddFavorite}
+                  />
+                </section>
+              )}
 
-        {!hasSearched && activeFilter === "favoritos" && (
-          <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
-            <Favorites items={favorites} onRemove={handleRemoveFavorite} />
-          </section>
-        )}
+              {activeFilter === "favoritos" && (
+                <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
+                  <Favorites items={favorites} onRemove={handleRemoveFavorite} />
+                </section>
+              )}
 
-        {!hasSearched && activeFilter === "alertas" && (
-          <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
-            <PriceAlerts
-              origin={origin}
-              destination={destination}
-              alerts={alerts}
-              onCreate={handleCreateAlert}
-              onToggle={handleToggleAlert}
-              onRemove={handleRemoveAlert}
-            />
-          </section>
-        )}
+              {activeFilter === "alertas" && (
+                <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
+                  <PriceAlerts
+                    origin={origin}
+                    destination={destination}
+                    alerts={alerts}
+                    onCreate={handleCreateAlert}
+                    onToggle={handleToggleAlert}
+                    onRemove={handleRemoveAlert}
+                  />
+                </section>
+              )}
 
-        {!hasSearched && (activeFilter === "voos" || activeFilter === "hoteis") && (
-          <section className="mx-auto w-full max-w-7xl px-4 pb-16 lg:px-8">
-            <div className="rounded-3xl border border-border/60 bg-white/70 p-6 text-sm text-muted-foreground shadow-[0_18px_60px_-42px_rgba(15,23,42,0.2)]">
-              Faça uma pesquisa para ver resultados de{" "}
-              {activeFilter === "voos" ? "voos" : "hoteis"}.
-            </div>
-          </section>
+              {(activeFilter === "voos" || activeFilter === "hoteis") && (
+                <section className="mx-auto w-full max-w-7xl px-4 pb-16 lg:px-8">
+                  <div className="rounded-3xl border border-border/60 bg-white/70 p-6 text-sm text-muted-foreground shadow-[0_18px_60px_-42px_rgba(15,23,42,0.2)]">
+                    Faça uma pesquisa para ver resultados de{" "}
+                    {activeFilter === "voos" ? "voos" : "hoteis"}.
+                  </div>
+                </section>
+              )}
+            </motion.div>
+          </AnimatePresence>
         )}
       </main>
 
