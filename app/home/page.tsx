@@ -320,6 +320,39 @@ export default function HomePage() {
     }
   }
 
+  useEffect(() => {
+    if (!lastRecent || hasSearched) return
+
+    setOrigin(lastRecent.origin)
+    setDestination(lastRecent.destination)
+    setDateFrom(lastRecent.dateFrom ?? "")
+    setDateTo(lastRecent.dateTo ?? "")
+    setPassengers(lastRecent.passengers)
+
+    setIsLoading(true)
+    setHasSearched(true)
+
+    Promise.all([fetch("/api/flights"), fetch("/api/hotels")])
+      .then(async ([flightsRes, hotelsRes]) => {
+        const flightsData = await flightsRes.json()
+        const hotelsData = await hotelsRes.json()
+        setFlights(flightsData)
+        setHotels(hotelsData)
+      })
+      .catch(() => {
+        console.error("Erro ao buscar dados")
+      })
+      .finally(() => {
+        setIsLoading(false)
+        requestAnimationFrame(() => {
+          resultsAnchorRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          })
+        })
+      })
+  }, [hasSearched, lastRecent])
+
   function handleRepeatSearch(item: RouteEntry) {
     setOrigin(item.origin)
     setDestination(item.destination)
@@ -778,6 +811,232 @@ export default function HomePage() {
                     <ResultsSection flights={flights} hotels={hotels} />
                   )}
                 </section>
+              </motion.div>
+            </AnimatePresence>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`extras-${activeFilter}`}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              >
+                {activeFilter === "tudo" && (
+                  <section className="mx-auto w-full max-w-7xl space-y-10 px-4 pb-16 lg:px-8">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <Search className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Pesquisas recentes
+                      </p>
+                    </div>
+                    <RecentSearches
+                      items={recentSearches}
+                      onRepeat={handleRepeatSearch}
+                      onRemove={handleRemoveRecent}
+                      onAddFavorite={handleAddFavorite}
+                    />
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <ArrowRight className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Ofertas do dia
+                      </p>
+                    </div>
+                    <DailyDeals
+                      deals={dailyDeals}
+                      isLoadingDeals={false}
+                      onPickDeal={handlePickDeal}
+                      onAddFavorite={handleAddFavorite}
+                    />
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <MapPin className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Destinos populares
+                      </p>
+                    </div>
+                    <PopularDestinations
+                      items={popularDestinations}
+                      onSelect={handlePickDestination}
+                    />
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <Heart className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Favoritos
+                      </p>
+                    </div>
+                    <Favorites items={favorites} onRemove={handleRemoveFavorite} />
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <Bell className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Alertas de preco
+                      </p>
+                    </div>
+                    <PriceAlerts
+                      origin={origin}
+                      destination={destination}
+                      alerts={alerts}
+                      onCreate={handleCreateAlert}
+                      onToggle={handleToggleAlert}
+                      onRemove={handleRemoveAlert}
+                    />
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <Sparkles className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Recomendacoes
+                      </p>
+                    </div>
+                    <Recommendations
+                      personalized={personalizedRecommendations}
+                      general={generalSuggestions}
+                    />
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <Sparkles className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Premium
+                      </p>
+                    </div>
+                    <PremiumBanner />
+                  </section>
+                )}
+
+                {activeFilter === "ofertas" && (
+                  <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <ArrowRight className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Ofertas do dia
+                      </p>
+                    </div>
+                    <DailyDeals
+                      deals={dailyDeals}
+                      isLoadingDeals={false}
+                      onPickDeal={handlePickDeal}
+                      onAddFavorite={handleAddFavorite}
+                    />
+                  </section>
+                )}
+
+                {activeFilter === "favoritos" && (
+                  <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <Heart className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Favoritos
+                      </p>
+                    </div>
+                    <Favorites items={favorites} onRemove={handleRemoveFavorite} />
+                  </section>
+                )}
+
+                {activeFilter === "alertas" && (
+                  <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <Bell className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Alertas de preco
+                      </p>
+                    </div>
+                    <PriceAlerts
+                      origin={origin}
+                      destination={destination}
+                      alerts={alerts}
+                      onCreate={handleCreateAlert}
+                      onToggle={handleToggleAlert}
+                      onRemove={handleRemoveAlert}
+                    />
+                  </section>
+                )}
+
+                {activeFilter === "voos" && (
+                  <section className="mx-auto w-full max-w-7xl space-y-10 px-4 pb-16 lg:px-8">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <Search className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Pesquisas recentes
+                      </p>
+                    </div>
+                    <RecentSearches
+                      items={recentSearches}
+                      onRepeat={handleRepeatSearch}
+                      onRemove={handleRemoveRecent}
+                      onAddFavorite={handleAddFavorite}
+                    />
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <ArrowRight className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Ofertas do dia
+                      </p>
+                    </div>
+                    <DailyDeals
+                      deals={dailyDeals}
+                      isLoadingDeals={false}
+                      onPickDeal={handlePickDeal}
+                      onAddFavorite={handleAddFavorite}
+                    />
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <MapPin className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Destinos populares
+                      </p>
+                    </div>
+                    <PopularDestinations
+                      items={popularDestinations}
+                      onSelect={handlePickDestination}
+                    />
+                  </section>
+                )}
+
+                {activeFilter === "hoteis" && (
+                  <section className="mx-auto w-full max-w-7xl space-y-10 px-4 pb-16 lg:px-8">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <MapPin className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Destinos populares
+                      </p>
+                    </div>
+                    <PopularDestinations
+                      items={popularDestinations}
+                      onSelect={handlePickDestination}
+                    />
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <Sparkles className="h-4 w-4" />
+                      </span>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                        Premium
+                      </p>
+                    </div>
+                    <PremiumBanner />
+                  </section>
+                )}
               </motion.div>
             </AnimatePresence>
           </>

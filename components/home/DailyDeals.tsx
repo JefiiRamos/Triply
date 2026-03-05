@@ -29,14 +29,19 @@ export default function DailyDeals({
 }: DailyDealsProps) {
   return (
     <section className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">
-            Ofertas do dia
-          </p>
-          <h2 className="text-lg font-semibold text-foreground">
-            Rotas em destaque
-          </h2>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
+            <Tag className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">
+              Ofertas do dia
+            </p>
+            <h2 className="text-lg font-semibold text-foreground">
+              Rotas em destaque
+            </h2>
+          </div>
         </div>
         <Badge variant="secondary" className="text-xs">
           Atualizado agora

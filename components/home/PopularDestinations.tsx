@@ -16,13 +16,18 @@ export default function PopularDestinations({
 }: PopularDestinationsProps) {
   return (
     <section className="space-y-4">
-      <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">
-          Destinos populares
-        </p>
-        <h2 className="text-lg font-semibold text-foreground">
-          Inspire sua proxima viagem
-        </h2>
+      <div className="flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
+          <MapPin className="h-5 w-5 text-primary" />
+        </div>
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">
+            Destinos populares
+          </p>
+          <h2 className="text-lg font-semibold text-foreground">
+            Inspire sua proxima viagem
+          </h2>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
