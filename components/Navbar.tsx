@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   Bell,
@@ -20,6 +20,7 @@ import {
 import Image from "next/image"
 import Link from "next/link"
 import appIcon from "@/lib/images/plann.er-icon.png"
+import { useRouter } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -32,8 +33,9 @@ import {
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const isLoggedIn = true
-  const user = { name: "Jeferson", plan: "free" as const }
+  const router = useRouter()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [user, setUser] = useState({ name: "Jeferson", plan: "free" as const })
   const unreadAlertsCount = 2
 
   const notifications = [
@@ -44,19 +46,50 @@ export default function Navbar() {
   ]
 
   const navItems = [
-    { label: "Voos", href: "/home" },
-    { label: "Hoteis", href: "/hotels" },
-    { label: "Ofertas", href: "/deals" },
+    { label: "Tudo", href: "/home" },
+    { label: "Voos", href: "/home?filter=voos" },
+    { label: "Hoteis", href: "/home?filter=hoteis" },
+    { label: "Ofertas", href: "/home?filter=ofertas" },
   ]
 
   const extraItems = [
-    { label: "Favoritos", href: "/favorites" },
-    { label: "Alertas", href: "/alerts" },
+    { label: "Favoritos", href: "/home?filter=favoritos" },
+    { label: "Alertas", href: "/home?filter=alertas" },
   ]
 
+  useEffect(() => {
+    const readUser = () => {
+      const raw = window.localStorage.getItem("planair:user")
+      if (!raw) {
+        setIsLoggedIn(false)
+        return
+      }
+
+      try {
+        const parsed = JSON.parse(raw) as { name?: string }
+        setUser({ name: parsed?.name || "Jeferson", plan: "free" })
+      } catch {
+        setUser({ name: "Jeferson", plan: "free" })
+      }
+
+      setIsLoggedIn(true)
+    }
+
+    readUser()
+    window.addEventListener("planair-auth-change", readUser)
+    window.addEventListener("storage", readUser)
+
+    return () => {
+      window.removeEventListener("planair-auth-change", readUser)
+      window.removeEventListener("storage", readUser)
+    }
+  }, [])
+
   function handleSignOut() {
-    // mock sign out
-    console.log("sign out")
+    window.localStorage.removeItem("planair:user")
+    window.dispatchEvent(new Event("planair-auth-change"))
+    setIsLoggedIn(false)
+    router.replace("/")
   }
 
   return (
@@ -318,13 +351,14 @@ export default function Navbar() {
           >
             <div className="flex flex-col gap-2 rounded-2xl border border-border/60 bg-white/80 p-4 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.35)] backdrop-blur-xl">
               {[
-                { label: "Voos", href: "/home" },
-                { label: "Hoteis", href: "/hotels" },
-                { label: "Ofertas", href: "/deals" },
+                { label: "Tudo", href: "/home" },
+                { label: "Voos", href: "/home?filter=voos" },
+                { label: "Hoteis", href: "/home?filter=hoteis" },
+                { label: "Ofertas", href: "/home?filter=ofertas" },
                 ...(isLoggedIn
                   ? [
-                      { label: "Favoritos", href: "/favorites" },
-                      { label: "Alertas", href: "/alerts" },
+                      { label: "Favoritos", href: "/home?filter=favoritos" },
+                      { label: "Alertas", href: "/home?filter=alertas" },
                     ]
                   : []),
               ].map((item) => (
