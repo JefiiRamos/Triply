@@ -68,6 +68,7 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
   const resultsAnchorRef = useRef<HTMLDivElement | null>(null)
+  const searchCardRef = useRef<HTMLDivElement | null>(null)
   const [greeting, setGreeting] = useState("Ola")
   const [userName, setUserName] = useState("Viajante")
   const [typedText, setTypedText] = useState("")
@@ -192,6 +193,10 @@ export default function HomePage() {
     }
   }, [activeFilter])
   const loadingTitle = "Estamos reunindo as melhores oportunidades para voce."
+
+  const handleScrollToSearchCard = () => {
+    searchCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
 
   useEffect(() => {
     if (typingTimeoutRef.current) {
@@ -594,11 +599,12 @@ export default function HomePage() {
             </motion.div>
 
             <motion.div
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, ease: "easeOut" }}
-                className="rounded-3xl border border-border/60 bg-white/85 p-6 shadow-[0_24px_80px_-55px_rgba(15,23,42,0.35)] backdrop-blur-xl md:p-8"
-              >
+              ref={searchCardRef}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+              className="rounded-3xl border border-border/60 bg-white/85 p-6 shadow-[0_24px_80px_-55px_rgba(15,23,42,0.35)] backdrop-blur-xl md:p-8"
+            >
                 <div className="flex items-start justify-between gap-6">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
@@ -837,6 +843,7 @@ export default function HomePage() {
                       onRepeat={handleRepeatSearch}
                       onRemove={handleRemoveRecent}
                       onAddFavorite={handleAddFavorite}
+                      onFirstSearchClick={handleScrollToSearchCard}
                     />
                     <div className="flex items-center gap-3">
                       <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
@@ -982,6 +989,7 @@ export default function HomePage() {
                       onRepeat={handleRepeatSearch}
                       onRemove={handleRemoveRecent}
                       onAddFavorite={handleAddFavorite}
+                      onFirstSearchClick={handleScrollToSearchCard}
                     />
                     <div className="flex items-center gap-3">
                       <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
@@ -1058,6 +1066,7 @@ export default function HomePage() {
                     onRepeat={handleRepeatSearch}
                     onRemove={handleRemoveRecent}
                     onAddFavorite={handleAddFavorite}
+                    onFirstSearchClick={handleScrollToSearchCard}
                   />
                   <DailyDeals
                     deals={dailyDeals}

@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { motion } from "framer-motion"
 import { Clock, Heart, RotateCcw, Trash2 } from "lucide-react"
@@ -32,6 +32,7 @@ type RecentSearchesProps = {
   onRepeat: (item: RouteEntry) => void
   onRemove: (id: string) => void
   onAddFavorite: (item: Omit<RouteEntry, "id">) => void
+  onFirstSearchClick: () => void
 }
 
 export default function RecentSearches({
@@ -39,6 +40,7 @@ export default function RecentSearches({
   onRepeat,
   onRemove,
   onAddFavorite,
+  onFirstSearchClick,
 }: RecentSearchesProps) {
   return (
     <section className="space-y-4">
@@ -72,7 +74,11 @@ export default function RecentSearches({
                 Faça sua primeira busca e veja suas rotas aqui.
               </p>
             </div>
-            <Button size="sm" className="rounded-2xl">
+            <Button
+              size="sm"
+              className="rounded-2xl"
+              onClick={onFirstSearchClick}
+            >
               Faça sua primeira busca
             </Button>
           </CardContent>
@@ -165,3 +171,4 @@ export default function RecentSearches({
     </section>
   )
 }
+

@@ -17,6 +17,7 @@ import FeatureSplitSection from "@/components/FeatureSplitSection"
 import FeatureHighlightsSection from "@/components/FeatureHighlightsSection"
 import ResultsSection from "@/components/ResultsSection"
 import LandingSearchCard from "@/components/LandingSearchCard"
+import LoadingSpinner from "@/components/ui/loading-spinner"
 
 export default function Page() {
   const [origin, setOrigin] = useState("")
@@ -38,6 +39,7 @@ export default function Page() {
   const typingTimeoutRef = useRef<number | null>(null)
   const loadingTypingTimeoutRef = useRef<number | null>(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [showSplash, setShowSplash] = useState(true)
   const storageKey = "planair:user"
   const router = useRouter()
 
@@ -59,6 +61,10 @@ export default function Page() {
   }, [hasSearched])
 
   useEffect(() => {
+    const splashTimer = window.setTimeout(() => {
+      setShowSplash(false)
+    }, 900)
+
     const readUser = () => {
       const raw = window.localStorage.getItem(storageKey)
       if (!raw) {
@@ -83,6 +89,7 @@ export default function Page() {
     window.addEventListener("storage", handleAuthChange)
 
     return () => {
+      window.clearTimeout(splashTimer)
       window.removeEventListener("planair-auth-change", handleAuthChange)
       window.removeEventListener("storage", handleAuthChange)
     }
@@ -189,6 +196,16 @@ export default function Page() {
       <Navbar />
 
       <main className="flex-1">
+        {showSplash && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-md">
+            <div className="flex flex-col items-center gap-4 rounded-3xl border border-border/60 bg-white/80 px-8 py-6 shadow-[0_30px_120px_-70px_rgba(15,23,42,0.35)]">
+              <LoadingSpinner size="lg" label="Carregando" />
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
+                preparando sua viagem
+              </p>
+            </div>
+          </div>
+        )}
         {!hasSearched ? (
           <div className="relative">
             <ScrollHeroSection

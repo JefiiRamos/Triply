@@ -3,6 +3,7 @@
 import { useMemo } from "react"
 import { motion } from "framer-motion"
 import { MapPin, Calendar, Users, Search, ArrowLeftRight } from "lucide-react"
+import SectionCard from "@/components/ui/section-card"
 
 interface SearchFormProps {
   origin: string
@@ -84,30 +85,12 @@ export default function SearchForm({
       transition={{ duration: 0.55, ease: "easeOut" }}
       className="relative mx-auto w-full max-w-5xl"
     >
-      {/* Card container */}
-      <div className="relative overflow-hidden rounded-3xl border border-border/70 bg-white/55 shadow-[0_30px_120px_-70px_rgba(15,23,42,0.35)] backdrop-blur-xl">
-        {/* subtle top highlight */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.14),transparent_55%)]" />
-
-        {/* Header */}
-        <div className="flex items-start gap-4 border-b border-border/60 px-6 py-5 md:px-8">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
-            <Search className="h-5 w-5 text-primary" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/80">
-              Primeiro passo
-            </p>
-            <h3 className="mt-1 text-lg font-bold text-foreground md:text-xl">
-              Vamos fazer a sua primeira pesquisa de viagem?
-            </h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Preencha os dados abaixo e encontre as melhores ofertas.
-            </p>
-          </div>
-        </div>
-
-        <div className="px-6 py-6 md:px-8 md:py-8">
+      <SectionCard
+        eyebrow="Primeiro passo"
+        title="Vamos fazer a sua primeira pesquisa de viagem?"
+        description="Preencha os dados abaixo e encontre as melhores ofertas."
+        icon={Search}
+      >
           <div className="grid gap-4 md:grid-cols-12">
             {/* Origem */}
             <div className="md:col-span-3">
@@ -234,8 +217,7 @@ export default function SearchForm({
               </span>
             </motion.button>
           </div>
-        </div>
-      </div>
+      </SectionCard>
     </motion.section>
   )
 }
