@@ -41,6 +41,32 @@ const stagger = {
 }
 
 export default function ProfilePage() {
+  const formatPhone = (value: string) => {
+    const digits = value.replace(/\D/g, "")
+    if (!digits) return ""
+
+    let rest = digits
+    if (rest.startsWith("55")) {
+      rest = rest.slice(2)
+    }
+
+    rest = rest.slice(0, 11)
+    const area = rest.slice(0, 2)
+    const local = rest.slice(2)
+    const splitIndex = local.length > 8 ? 5 : 4
+
+    let formatted = "+55"
+    if (area) formatted += ` (${area})`
+    if (local) {
+      formatted += " "
+      formatted +=
+        local.length > splitIndex
+          ? `${local.slice(0, splitIndex)}-${local.slice(splitIndex)}`
+          : local
+    }
+
+    return formatted
+  }
   const editSectionRef = useRef<HTMLDivElement | null>(null)
   const [actionMessage, setActionMessage] = useState<string | null>(null)
   const [isEditingProfile, setIsEditingProfile] = useState(false)
@@ -413,8 +439,14 @@ export default function ProfilePage() {
                       <input
                         value={profileDraft.phone}
                         onChange={(event) =>
-                          setProfileDraft((prev) => ({ ...prev, phone: event.target.value }))
+                          setProfileDraft((prev) => ({
+                            ...prev,
+                            phone: formatPhone(event.target.value),
+                          }))
                         }
+                        inputMode="tel"
+                        autoComplete="tel"
+                        placeholder="+55 (11) 99999-0000"
                         disabled={!isEditingProfile}
                         className="w-full rounded-2xl border border-border/60 bg-white px-4 py-2.5 text-sm text-foreground shadow-sm outline-none transition focus:border-primary/50 focus:ring-2 focus:ring-primary/10 disabled:cursor-not-allowed disabled:bg-slate-100"
                       />
