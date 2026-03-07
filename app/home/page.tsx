@@ -451,7 +451,7 @@ export default function HomePage() {
       <Navbar />
 
       <main className="flex-1">
-        <section className="relative overflow-hidden pb-12 pt-8 md:pt-10">
+        <section className="relative overflow-hidden pb-6 pt-8 md:pt-10">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(217_91%_60%/0.10),transparent_60%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,250,252,0.96),rgba(255,255,255,1))]" />
           <div className="absolute -top-20 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.14),transparent_62%)] blur-2xl" />
