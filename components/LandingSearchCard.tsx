@@ -58,6 +58,8 @@ export default function LandingSearchCard({
       setPassengers={setPassengers}
       onSearch={onSearch}
       isLoading={isLoading}
+      showOrbBackground
+      orbSize={600}
     />
   )
 

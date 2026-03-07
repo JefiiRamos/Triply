@@ -9,7 +9,6 @@ import {
   MapPin,
   Search,
   Sparkles,
-  Users,
   Heart,
   ArrowRight,
 } from "lucide-react"
@@ -35,6 +34,7 @@ import PriceAlerts from "@/components/home/PriceAlerts"
 import Recommendations from "@/components/home/Recommendations"
 import PremiumBanner from "@/components/home/PremiumBanner"
 import { Button } from "@/components/ui/button"
+import SearchForm from "@/components/SearchForm"
 
 type RouteEntry = {
   id: string
@@ -598,148 +598,33 @@ export default function HomePage() {
               </div>
             </motion.div>
 
-            <motion.div
-              ref={searchCardRef}
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, ease: "easeOut" }}
-              className="rounded-3xl border border-border/60 bg-white/85 p-6 shadow-[0_24px_80px_-55px_rgba(15,23,42,0.35)] backdrop-blur-xl md:p-8"
-            >
-                <div className="flex items-start justify-between gap-6">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                      Home
-                    </p>
-                    <h1 className="mt-4 text-2xl font-semibold text-foreground md:text-3xl">
-                      O que voce quer planejar hoje?
-                    </h1>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      Monte uma nova rota e acompanhe as ofertas em tempo real.
-                    </p>
-                  </div>
+            <div ref={searchCardRef} className="py-14">
+              <SearchForm
+                origin={origin}
+                setOrigin={setOrigin}
+                destination={destination}
+                setDestination={setDestination}
+                dateFrom={dateFrom}
+                setDateFrom={setDateFrom}
+                dateTo={dateTo}
+                setDateTo={setDateTo}
+                passengers={passengers}
+                setPassengers={setPassengers}
+                onSearch={handleSearch}
+                isLoading={isLoading}
+                showOrbBackground
+                orbSize={700}
+                eyebrow="Home"
+                title="O que voce quer planejar hoje?"
+                description="Monte uma nova rota e acompanhe as ofertas em tempo real."
+                headerRight={
                   <div className="hidden items-center gap-2 rounded-2xl border border-border/60 bg-white/80 px-3 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground shadow-[0_12px_30px_-28px_rgba(15,23,42,0.2)] md:flex">
                     <Sparkles className="h-4 w-4 text-primary" />
                     Premium
                   </div>
-                </div>
-
-                <div className="mt-6 grid gap-4 md:grid-cols-12">
-                  <div className="md:col-span-3">
-                    <label
-                      htmlFor="home-origin"
-                      className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground"
-                    >
-                      Origem
-                    </label>
-                    <div className="mt-2 flex items-center gap-2 rounded-2xl border border-border/70 bg-white/70 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.25)]">
-                      <MapPin className="h-4 w-4 text-primary" />
-                      <input
-                        id="home-origin"
-                        value={origin}
-                        onChange={(event) => setOrigin(event.target.value)}
-                        placeholder="Ex: Sao Paulo"
-                        className="w-full bg-transparent outline-none placeholder:text-muted-foreground"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-3">
-                    <label
-                      htmlFor="home-destination"
-                      className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground"
-                    >
-                      Destino
-                    </label>
-                    <div className="mt-2 flex items-center gap-2 rounded-2xl border border-border/70 bg-white/70 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.25)]">
-                      <MapPin className="h-4 w-4 text-primary" />
-                      <input
-                        id="home-destination"
-                        value={destination}
-                        onChange={(event) => setDestination(event.target.value)}
-                        placeholder="Ex: Lisboa"
-                        className="w-full bg-transparent outline-none placeholder:text-muted-foreground"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label
-                      htmlFor="home-date-from"
-                      className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground"
-                    >
-                      Ida
-                    </label>
-                    <div className="mt-2 flex items-center gap-2 rounded-2xl border border-border/70 bg-white/70 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.25)]">
-                      <Calendar className="h-4 w-4 text-primary" />
-                      <input
-                        id="home-date-from"
-                        type="date"
-                        value={dateFrom}
-                        onChange={(event) => setDateFrom(event.target.value)}
-                        className="w-full bg-transparent outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label
-                      htmlFor="home-date-to"
-                      className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground"
-                    >
-                      Volta
-                    </label>
-                    <div className="mt-2 flex items-center gap-2 rounded-2xl border border-border/70 bg-white/70 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.25)]">
-                      <Calendar className="h-4 w-4 text-primary" />
-                      <input
-                        id="home-date-to"
-                        type="date"
-                        value={dateTo}
-                        onChange={(event) => setDateTo(event.target.value)}
-                        className="w-full bg-transparent outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label
-                      htmlFor="home-passengers"
-                      className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground"
-                    >
-                      Passageiros
-                    </label>
-                    <div className="mt-2 flex items-center gap-2 rounded-2xl border border-border/70 bg-white/70 px-4 py-3 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.25)]">
-                      <Users className="h-4 w-4 text-primary" />
-                      <select
-                        id="home-passengers"
-                        value={passengers}
-                        onChange={(event) => setPassengers(event.target.value)}
-                        className="w-full bg-transparent outline-none"
-                      >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5+</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-                  <p className="text-xs text-muted-foreground">
-                    Dica: voce pode salvar varias rotas e acompanhar as ofertas.
-                  </p>
-                  <Button
-                    type="button"
-                    onClick={handleSearch}
-                    disabled={!canSearch}
-                    className="rounded-2xl shadow-[0_16px_36px_-20px_rgba(37,99,235,0.55)] hover:-translate-y-0.5"
-                  >
-                    <Search className="h-4 w-4" />
-                    Buscar viagens
-                  </Button>
-                </div>
-              </motion.div>
+                }
+              />
+            </div>
 
             <div ref={resultsAnchorRef} className="h-6" />
           </div>

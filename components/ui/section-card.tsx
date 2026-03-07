@@ -7,6 +7,7 @@ type SectionCardProps = {
   title: string
   description?: string
   icon: LucideIcon
+  headerRight?: ReactNode
   children: ReactNode
   className?: string
   headerClassName?: string
@@ -18,6 +19,7 @@ export default function SectionCard({
   title,
   description,
   icon: Icon,
+  headerRight,
   children,
   className,
   headerClassName,
@@ -34,24 +36,29 @@ export default function SectionCard({
 
       <div
         className={cn(
-          "flex items-start gap-4 border-b border-border/60 px-6 py-5 md:px-8",
+          "flex items-start justify-between gap-4 border-b border-border/60 px-6 py-5 md:px-8",
           headerClassName,
         )}
       >
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
-          <Icon className="h-5 w-5 text-primary" />
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
+            <Icon className="h-5 w-5 text-primary" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/80">
+              {eyebrow}
+            </p>
+            <h3 className="mt-1 text-lg font-bold text-foreground md:text-xl">
+              {title}
+            </h3>
+            {description ? (
+              <p className="mt-1 text-sm text-muted-foreground">
+                {description}
+              </p>
+            ) : null}
+          </div>
         </div>
-        <div className="min-w-0">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/80">
-            {eyebrow}
-          </p>
-          <h3 className="mt-1 text-lg font-bold text-foreground md:text-xl">
-            {title}
-          </h3>
-          {description ? (
-            <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-          ) : null}
-        </div>
+        {headerRight ? <div className="shrink-0">{headerRight}</div> : null}
       </div>
 
       <div className={cn("px-6 py-6 md:px-8 md:py-8", contentClassName)}>

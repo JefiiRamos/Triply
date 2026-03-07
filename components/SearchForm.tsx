@@ -4,6 +4,7 @@ import { useMemo } from "react"
 import { motion } from "framer-motion"
 import { MapPin, Calendar, Users, Search, ArrowLeftRight } from "lucide-react"
 import SectionCard from "@/components/ui/section-card"
+import OrbLayer from "@/components/ui/orb-layer"
 
 interface SearchFormProps {
   origin: string
@@ -18,6 +19,12 @@ interface SearchFormProps {
   setPassengers: (v: string) => void
   onSearch: () => void
   isLoading: boolean
+  showOrbBackground?: boolean
+  orbSize?: number
+  eyebrow?: string
+  title?: string
+  description?: string
+  headerRight?: React.ReactNode
 }
 
 function FieldShell({
@@ -43,7 +50,6 @@ function FieldShell({
       </div>
 
       <div className="relative">
-        {/* glow on focus-within */}
         <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-primary/25 via-primary/10 to-primary/25 opacity-0 blur transition-opacity duration-300 group-focus-within:opacity-100" />
         <div className="relative rounded-2xl border border-border/70 bg-white/55 p-3 shadow-[0_16px_50px_-40px_rgba(15,23,42,0.35)] backdrop-blur-xl">
           {children}
@@ -66,9 +72,14 @@ export default function SearchForm({
   setPassengers,
   onSearch,
   isLoading,
+  showOrbBackground = false,
+  orbSize,
+  eyebrow = "Primeiro passo",
+  title = "Vamos fazer a sua primeira pesquisa de viagem?",
+  description = "Preencha os dados abaixo e encontre as melhores ofertas.",
+  headerRight,
 }: SearchFormProps) {
   const canSearch = useMemo(() => {
-    // Você pode endurecer isso se quiser validar datas também
     return origin.trim().length > 0 && destination.trim().length > 0
   }, [origin, destination])
 
@@ -85,14 +96,28 @@ export default function SearchForm({
       transition={{ duration: 0.55, ease: "easeOut" }}
       className="relative mx-auto w-full max-w-5xl"
     >
-      <SectionCard
-        eyebrow="Primeiro passo"
-        title="Vamos fazer a sua primeira pesquisa de viagem?"
-        description="Preencha os dados abaixo e encontre as melhores ofertas."
-        icon={Search}
+      <div
+        className={
+          showOrbBackground
+            ? "relative flex min-h-[420px] items-center justify-center py-20"
+            : "relative"
+        }
       >
+        {showOrbBackground ? (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-visible">
+            <OrbLayer className="opacity-60" size={orbSize ?? 880} />
+          </div>
+        ) : null}
+
+        <SectionCard
+          eyebrow={eyebrow}
+          title={title}
+          description={description}
+          icon={Search}
+          className="relative z-10 w-full"
+          headerRight={headerRight}
+        >
           <div className="grid gap-4 md:grid-cols-12">
-            {/* Origem */}
             <div className="md:col-span-3">
               <FieldShell label="Origem" icon={MapPin}>
                 <div className="flex items-center gap-2">
@@ -109,7 +134,6 @@ export default function SearchForm({
               </FieldShell>
             </div>
 
-            {/* Swap button */}
             <div className="flex items-end justify-center md:col-span-1">
               <motion.button
                 type="button"
@@ -123,7 +147,6 @@ export default function SearchForm({
               </motion.button>
             </div>
 
-            {/* Destino */}
             <div className="md:col-span-2">
               <FieldShell label="Destino" icon={MapPin}>
                 <div className="flex items-center gap-2">
@@ -140,7 +163,6 @@ export default function SearchForm({
               </FieldShell>
             </div>
 
-            {/* Ida */}
             <div className="md:col-span-2">
               <FieldShell label="Ida" icon={Calendar}>
                 <div className="flex items-center gap-2">
@@ -156,7 +178,6 @@ export default function SearchForm({
               </FieldShell>
             </div>
 
-            {/* Volta */}
             <div className="md:col-span-2">
               <FieldShell label="Volta" icon={Calendar}>
                 <div className="flex items-center gap-2">
@@ -172,7 +193,6 @@ export default function SearchForm({
               </FieldShell>
             </div>
 
-            {/* Passageiros */}
             <div className="md:col-span-2">
               <FieldShell label="Passageiros" icon={Users}>
                 <div className="flex items-center gap-2">
@@ -194,7 +214,6 @@ export default function SearchForm({
             </div>
           </div>
 
-          {/* Footer / CTA */}
           <div className="mt-6 flex flex-col items-stretch gap-3 md:flex-row md:items-center md:justify-between">
             <p className="text-xs text-muted-foreground">
               Dica: você pode trocar origem e destino no botão do meio.
@@ -209,7 +228,6 @@ export default function SearchForm({
                          shadow-[0_18px_40px_-20px_rgba(37,99,235,0.55)] transition
                          hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
             >
-              {/* shine */}
               <span className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.38),transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <span className="relative inline-flex items-center gap-2">
                 <Search className="h-4 w-4" />
@@ -217,7 +235,8 @@ export default function SearchForm({
               </span>
             </motion.button>
           </div>
-      </SectionCard>
+        </SectionCard>
+      </div>
     </motion.section>
   )
 }
