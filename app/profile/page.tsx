@@ -29,6 +29,7 @@ import {
 } from "lucide-react"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
+import AppSelect from "@/components/ui/app-select"
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
@@ -467,39 +468,41 @@ export default function ProfilePage() {
                     </label>
                     <label className="space-y-2 text-xs font-semibold text-muted-foreground">
                       Moeda preferida
-                      <select
+                      <AppSelect
                         value={profileDraft.currency}
-                        onChange={(event) =>
+                        onValueChange={(value) =>
                           setProfileDraft((prev) => ({
                             ...prev,
-                            currency: event.target.value,
+                            currency: value,
                           }))
                         }
                         disabled={!isEditingProfile}
-                        className="w-full rounded-2xl border border-border/60 bg-white px-4 py-2.5 text-sm text-foreground shadow-sm outline-none transition focus:border-primary/50 focus:ring-2 focus:ring-primary/10 disabled:cursor-not-allowed disabled:bg-slate-100"
-                      >
-                        <option>BRL</option>
-                        <option>USD</option>
-                        <option>EUR</option>
-                      </select>
+                        options={[
+                          { value: "BRL", label: "BRL" },
+                          { value: "USD", label: "USD" },
+                          { value: "EUR", label: "EUR" },
+                        ]}
+                        triggerClassName="h-10 bg-white shadow-sm"
+                      />
                     </label>
                     <label className="space-y-2 text-xs font-semibold text-muted-foreground">
                       Idioma
-                      <select
+                      <AppSelect
                         value={profileDraft.language}
-                        onChange={(event) =>
+                        onValueChange={(value) =>
                           setProfileDraft((prev) => ({
                             ...prev,
-                            language: event.target.value,
+                            language: value,
                           }))
                         }
                         disabled={!isEditingProfile}
-                        className="w-full rounded-2xl border border-border/60 bg-white px-4 py-2.5 text-sm text-foreground shadow-sm outline-none transition focus:border-primary/50 focus:ring-2 focus:ring-primary/10 disabled:cursor-not-allowed disabled:bg-slate-100"
-                      >
-                        <option>Portugues</option>
-                        <option>English</option>
-                        <option>Espanol</option>
-                      </select>
+                        options={[
+                          { value: "Portugues", label: "Português" },
+                          { value: "English", label: "English" },
+                          { value: "Espanol", label: "Espanol" },
+                        ]}
+                        triggerClassName="h-10 bg-white shadow-sm"
+                      />
                     </label>
                     <label className="space-y-2 text-xs font-semibold text-muted-foreground">
                       Aeroporto favorito

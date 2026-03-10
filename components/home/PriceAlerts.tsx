@@ -1,10 +1,10 @@
-"use client"
+﻿"use client"
 
 import { useMemo, useState } from "react"
 import { Bell, Trash2 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
+import AppSwitch from "@/components/ui/app-switch"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
@@ -53,7 +53,7 @@ export default function PriceAlerts({
         </div>
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">
-            Alertas de preco
+            Alertas de preço
           </p>
           <h2 className="text-lg font-semibold text-foreground">
             Seja avisado quando baixar
@@ -74,7 +74,7 @@ export default function PriceAlerts({
                   : "Preencha origem e destino para ativar."}
               </p>
             </div>
-            <Switch
+            <AppSwitch
               checked={currentAlert?.status === "ativo"}
               onCheckedChange={(checked) => {
                 if (!canCreate) return
@@ -90,16 +90,17 @@ export default function PriceAlerts({
           </div>
           <div className="grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
             <Input
-              type="number"
-              min="0"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={targetPrice}
               onChange={(event) => setTargetPrice(event.target.value)}
-              placeholder="Preco alvo opcional"
-              className="rounded-2xl"
+              placeholder="Preço alvo opcional"
+              className="rounded-2xl border border-border/60 bg-white/80 px-4 py-2.5 text-sm shadow-[0_12px_32px_-26px_rgba(15,23,42,0.18)] focus-visible:ring-primary/20"
             />
             <Button
               variant="outline"
-              className="rounded-2xl"
+              className="rounded-2xl border-border/60 bg-white/80 shadow-[0_12px_32px_-26px_rgba(15,23,42,0.18)]"
               onClick={() =>
                 onCreate(targetPrice ? Number(targetPrice) : undefined)
               }
@@ -116,55 +117,60 @@ export default function PriceAlerts({
       {alerts.length === 0 ? (
         <Card className="rounded-3xl border border-border/60 bg-white/70 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]">
           <CardContent className="p-6 text-sm text-muted-foreground">
-            Nenhum alerta configurado. Ative alertas para acompanhar os precos.
+            Nenhum alerta configurado. Ative alertas para acompanhar os preços.
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {alerts.map((alert) => (
-            <Card
-              key={alert.id}
-              className="rounded-3xl border border-border/60 bg-white/85 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]"
-            >
-              <CardContent className="space-y-3 p-5">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-semibold text-foreground">
-                    {alert.origin} → {alert.destination}
+        <div className="space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+            Seus alertas
+          </p>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {alerts.map((alert) => (
+              <Card
+                key={alert.id}
+                className="rounded-3xl border border-border/60 bg-white/85 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]"
+              >
+                <CardContent className="space-y-3 p-5">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-foreground">
+                      {alert.origin} → {alert.destination}
+                    </p>
+                    <Badge
+                      variant={alert.status === "ativo" ? "default" : "outline"}
+                    >
+                      {alert.status}
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Preço alvo:{" "}
+                    {alert.targetPrice
+                      ? `R$ ${alert.targetPrice.toLocaleString("pt-BR")}`
+                      : "Não definido"}
                   </p>
-                  <Badge
-                    variant={alert.status === "ativo" ? "default" : "outline"}
-                  >
-                    {alert.status}
-                  </Badge>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Preco alvo:{" "}
-                  {alert.targetPrice
-                    ? `R$ ${alert.targetPrice.toLocaleString("pt-BR")}`
-                    : "Nao definido"}
-                </p>
-                <div className="flex items-center justify-between pt-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="rounded-2xl"
-                    onClick={() => onToggle(alert.id)}
-                  >
-                    {alert.status === "ativo" ? "Pausar" : "Reativar"}
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="rounded-2xl"
-                    onClick={() => onRemove(alert.id)}
-                    aria-label="Remover alerta"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                  <div className="flex items-center justify-between pt-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="rounded-2xl"
+                      onClick={() => onToggle(alert.id)}
+                    >
+                      {alert.status === "ativo" ? "Pausar" : "Reativar"}
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="rounded-2xl"
+                      onClick={() => onRemove(alert.id)}
+                      aria-label="Remover alerta"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       )}
     </section>
