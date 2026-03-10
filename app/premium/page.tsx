@@ -1,7 +1,16 @@
 ﻿"use client"
 
+import { useMemo, useRef, useState } from "react"
 import { motion } from "framer-motion"
-import { MessageCircle, Plus, Search, Sparkles } from "lucide-react"
+import {
+  FileText,
+  Image as ImageIcon,
+  MessageCircle,
+  Mic,
+  Plus,
+  Search,
+  Sparkles,
+} from "lucide-react"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import SectionCard from "@/components/ui/section-card"
@@ -26,6 +35,19 @@ const suggestions = [
 ]
 
 export default function PremiumPage() {
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedChat, setSelectedChat] = useState<string | null>(null)
+  const [isAttachOpen, setIsAttachOpen] = useState(false)
+  const imageInputRef = useRef<HTMLInputElement | null>(null)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const audioInputRef = useRef<HTMLInputElement | null>(null)
+
+  const filteredChats = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase()
+    if (!term) return recentChats
+    return recentChats.filter((chat) => chat.toLowerCase().includes(term))
+  }, [searchTerm])
+
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <Navbar />
@@ -55,25 +77,34 @@ export default function PremiumPage() {
                 }
               >
                 <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
-                  <aside className="space-y-4">
+                  <motion.aside
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.35, ease: "easeOut" }}
+                    className="space-y-4"
+                  >
                     <div className="space-y-3">
                       <Button
                         type="button"
                         variant="outline"
                         className="w-full justify-start rounded-2xl border-border/70 bg-white/80 shadow-[0_16px_40px_-34px_rgba(15,23,42,0.25)]"
+                        onClick={() => setSelectedChat(null)}
                       >
                         <Plus className="h-4 w-4" />
                         Novo chat
                       </Button>
 
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        className="w-full justify-start rounded-2xl text-muted-foreground hover:bg-white/70"
-                      >
-                        <Search className="h-4 w-4" />
-                        Procurar chats
-                      </Button>
+                      <div className="relative">
+                        <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                          <Search className="h-4 w-4" />
+                        </div>
+                        <input
+                          value={searchTerm}
+                          onChange={(event) => setSearchTerm(event.target.value)}
+                          placeholder="Procurar chats"
+                          className="w-full rounded-2xl border border-border/60 bg-white/80 py-3 pl-10 pr-3 text-sm text-foreground shadow-[0_16px_40px_-34px_rgba(15,23,42,0.2)] outline-none transition focus:border-primary/50"
+                        />
+                      </div>
                     </div>
 
                     <div className="rounded-2xl border border-border/60 bg-white/70 p-4 shadow-[0_18px_50px_-44px_rgba(15,23,42,0.25)]">
@@ -82,19 +113,32 @@ export default function PremiumPage() {
                       </p>
 
                       <div className="space-y-2">
-                        {recentChats.map((chat) => (
-                          <button
+                        {filteredChats.map((chat) => (
+                          <motion.button
                             key={chat}
-                            className="w-full rounded-xl px-3 py-2 text-left text-sm text-muted-foreground transition hover:bg-white"
+                            onClick={() => setSelectedChat(chat)}
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.25, ease: "easeOut" }}
+                            className={`w-full rounded-xl px-3 py-2 text-left text-sm transition hover:bg-white ${
+                              selectedChat === chat
+                                ? "bg-white text-foreground"
+                                : "text-muted-foreground"
+                            }`}
                           >
                             {chat}
-                          </button>
+                          </motion.button>
                         ))}
                       </div>
                     </div>
-                  </aside>
+                  </motion.aside>
 
-                  <div className="flex flex-col gap-6">
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, ease: "easeOut", delay: 0.05 }}
+                    className="flex flex-col gap-6"
+                  >
                     {/* <div className="chat-header rounded-3xl border border-border/60 bg-white/70 p-6 shadow-[0_22px_70px_-50px_rgba(15,23,42,0.3)]">
                       <div className="flex items-start gap-4">
                         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
@@ -116,7 +160,12 @@ export default function PremiumPage() {
                       </div>
                     </div> */}
 
-                    <div className="chat-history relative min-h-[520px] rounded-3xl border border-border/60 bg-white/40 px-4 py-6 shadow-[0_22px_70px_-50px_rgba(15,23,42,0.12)]">
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.35, ease: "easeOut" }}
+                      className="chat-history relative min-h-[520px] rounded-3xl border border-border/60 bg-white/40 px-4 py-6 shadow-[0_22px_70px_-50px_rgba(15,23,42,0.12)]"
+                    >
                       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                         <OrbLayer className="opacity-50" size={520} />
                       </div>
@@ -143,7 +192,12 @@ export default function PremiumPage() {
                           <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 opacity-0 blur transition-opacity duration-300 group-focus-within:opacity-100" />
 
                           <div className="relative flex items-center gap-3 rounded-2xl border border-border/70 bg-white/75 p-3 shadow-[0_16px_50px_-40px_rgba(15,23,42,0.25)]">
-                            <button className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                            <button
+                              type="button"
+                              onClick={() => setIsAttachOpen((open) => !open)}
+                              className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary"
+                              aria-label="Adicionar anexos"
+                            >
                               <Plus className="h-4 w-4" />
                             </button>
 
@@ -159,27 +213,87 @@ export default function PremiumPage() {
                               Enviar
                             </Button>
                           </div>
+
+                          {isAttachOpen ? (
+                            <motion.div
+                              initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              transition={{ duration: 0.2, ease: "easeOut" }}
+                              className="absolute left-0 top-full z-20 mt-3 w-[240px] rounded-2xl border border-border/60 bg-white/95 p-2 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.25)]"
+                            >
+                              <button
+                                type="button"
+                                onClick={() => imageInputRef.current?.click()}
+                                className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-foreground transition hover:bg-muted/50"
+                              >
+                                <ImageIcon className="h-4 w-4 text-primary" />
+                                Selecionar imagem
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => fileInputRef.current?.click()}
+                                className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-foreground transition hover:bg-muted/50"
+                              >
+                                <FileText className="h-4 w-4 text-primary" />
+                                Selecionar arquivo
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => audioInputRef.current?.click()}
+                                className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-foreground transition hover:bg-muted/50"
+                              >
+                                <Mic className="h-4 w-4 text-primary" />
+                                Selecionar audio
+                              </button>
+                            </motion.div>
+                          ) : null}
+
+                          <input
+                            ref={imageInputRef}
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                          />
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            className="hidden"
+                          />
+                          <input
+                            ref={audioInputRef}
+                            type="file"
+                            accept="audio/*"
+                            className="hidden"
+                          />
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
 
-                    <div className="chat-suggestions pt-2">
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.35, ease: "easeOut", delay: 0.1 }}
+                      className="chat-suggestions pt-2"
+                    >
                       <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                         Sugestoes rapidas
                       </p>
 
                       <div className="grid gap-3 md:grid-cols-3">
                         {suggestions.map((item) => (
-                          <button
+                          <motion.button
                             key={item}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.25, ease: "easeOut" }}
                             className="rounded-2xl border border-border/60 bg-white/70 px-4 py-4 text-left text-sm text-muted-foreground shadow-[0_16px_50px_-40px_rgba(15,23,42,0.2)] transition hover:bg-white"
                           >
                             {item}
-                          </button>
+                          </motion.button>
                         ))}
                       </div>
-                    </div>
-                  </div>
+                    </motion.div>
+                  </motion.div>
                 </div>
               </SectionCard>
             </motion.div>
