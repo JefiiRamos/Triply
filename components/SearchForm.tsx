@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { MapPin, Calendar, Users, Search, ArrowLeftRight } from "lucide-react"
 import SectionCard from "@/components/ui/section-card"
 import OrbLayer from "@/components/ui/orb-layer"
+import PrettySelect from "@/components/ui/pretty-select"
 
 interface SearchFormProps {
   origin: string
@@ -82,6 +83,14 @@ export default function SearchForm({
   const canSearch = useMemo(() => {
     return origin.trim().length > 0 && destination.trim().length > 0
   }, [origin, destination])
+
+  const passengerOptions = [
+    { value: "1", label: "1" },
+    { value: "2", label: "2" },
+    { value: "3", label: "3" },
+    { value: "4", label: "4" },
+    { value: "5", label: "5+" },
+  ]
 
   function swapPlaces() {
     const o = origin
@@ -194,23 +203,14 @@ export default function SearchForm({
             </div>
 
             <div className="md:col-span-2">
-              <FieldShell label="Passageiros" icon={Users}>
-                <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-muted-foreground" />
-                  <select
-                    id="passengers"
-                    value={passengers}
-                    onChange={(e) => setPassengers(e.target.value)}
-                    className="w-full bg-transparent text-sm text-foreground outline-none"
-                  >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5+</option>
-                  </select>
-                </div>
-              </FieldShell>
+              <PrettySelect
+                label="Passageiros"
+                icon={Users}
+                value={passengers}
+                onValueChange={setPassengers}
+                options={passengerOptions}
+                placeholder="Selecione"
+              />
             </div>
           </div>
 
