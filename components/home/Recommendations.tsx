@@ -36,10 +36,43 @@ export default function Recommendations({
           <TabsTrigger value="personalized">Para voce</TabsTrigger>
           <TabsTrigger value="general">Sugestoes gerais</TabsTrigger>
         </TabsList>
-        <TabsContent value="personalized" className="mt-4">
-          {showPersonalized ? (
+        <div className="relative mt-4">
+          <TabsContent
+            value="personalized"
+            forceMount
+            className="transition-all duration-300 data-[state=inactive]:pointer-events-none data-[state=inactive]:absolute data-[state=inactive]:inset-0 data-[state=inactive]:translate-y-2 data-[state=inactive]:opacity-0 data-[state=active]:relative data-[state=active]:translate-y-0 data-[state=active]:opacity-100"
+          >
+            {showPersonalized ? (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {personalized.map((item) => (
+                  <Card
+                    key={item}
+                    className="rounded-3xl border border-border/60 bg-white/80 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]"
+                  >
+                    <CardContent className="flex items-center gap-3 p-5">
+                      <TrendingUp className="h-4 w-4 text-primary" />
+                      <p className="text-sm font-semibold text-foreground">
+                        {item}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <Card className="rounded-3xl border border-border/60 bg-white/70 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]">
+                <CardContent className="p-6 text-sm text-muted-foreground">
+                  Busque mais rotas para receber recomendacoes personalizadas.
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+          <TabsContent
+            value="general"
+            forceMount
+            className="transition-all duration-300 data-[state=inactive]:pointer-events-none data-[state=inactive]:absolute data-[state=inactive]:inset-0 data-[state=inactive]:translate-y-2 data-[state=inactive]:opacity-0 data-[state=active]:relative data-[state=active]:translate-y-0 data-[state=active]:opacity-100"
+          >
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {personalized.map((item) => (
+              {general.map((item) => (
                 <Card
                   key={item}
                   className="rounded-3xl border border-border/60 bg-white/80 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]"
@@ -53,31 +86,8 @@ export default function Recommendations({
                 </Card>
               ))}
             </div>
-          ) : (
-            <Card className="rounded-3xl border border-border/60 bg-white/70 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]">
-              <CardContent className="p-6 text-sm text-muted-foreground">
-                Busque mais rotas para receber recomendacoes personalizadas.
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
-        <TabsContent value="general" className="mt-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {general.map((item) => (
-              <Card
-                key={item}
-                className="rounded-3xl border border-border/60 bg-white/80 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]"
-              >
-                <CardContent className="flex items-center gap-3 p-5">
-                  <TrendingUp className="h-4 w-4 text-primary" />
-                  <p className="text-sm font-semibold text-foreground">
-                    {item}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
+          </TabsContent>
+        </div>
       </Tabs>
     </section>
   )
