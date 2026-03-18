@@ -43,10 +43,10 @@ export default function PopularDestinations({
             whileHover={{ y: -4 }}
             aria-label={`Selecionar destino ${destination.name}`}
           >
-            <Card className="overflow-hidden rounded-3xl border border-border/60 bg-white/85 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]">
+            <Card className="overflow-hidden rounded-3xl border border-border/60 bg-white/85 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/80">
               <CardContent className="relative p-5">
                 <div
-                  className={`absolute inset-0 opacity-80 ${destination.gradient}`}
+                  className={`absolute inset-0 opacity-80 ${destination.gradient} dark:opacity-60`}
                 />
                 <div className="relative space-y-2">
                   <div className="flex items-center gap-2 text-sm font-semibold text-foreground">

@@ -51,7 +51,10 @@ export default function DailyDeals({
       {isLoadingDeals ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 3 }).map((_, index) => (
-            <Card key={`deal-skeleton-${index}`} className="rounded-3xl">
+            <Card
+              key={`deal-skeleton-${index}`}
+              className="rounded-3xl border border-border/60 bg-white/80 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/80"
+            >
               <CardContent className="space-y-4 p-5">
                 <Skeleton className="h-4 w-32" />
                 <Skeleton className="h-6 w-48" />
@@ -70,7 +73,7 @@ export default function DailyDeals({
               transition={{ duration: 0.4, delay: index * 0.05 }}
               whileHover={{ y: -4 }}
             >
-              <Card className="rounded-3xl border border-border/60 bg-white/85 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]">
+              <Card className="rounded-3xl border border-border/60 bg-white/85 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/80">
                 <CardContent className="space-y-4 p-5">
                   <div className="flex items-start justify-between">
                     <div>
@@ -85,7 +88,7 @@ export default function DailyDeals({
                       </p>
                     </div>
                     {deal.discount ? (
-                      <Badge className="rounded-full bg-emerald-100 text-emerald-700">
+                      <Badge className="rounded-full bg-emerald-100 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/20 dark:text-emerald-200">
                         -{deal.discount}%
                       </Badge>
                     ) : (

@@ -6,9 +6,11 @@ import {
   Bell,
   Calendar,
   Clock,
+  Moon,
   MapPin,
   Search,
   Sparkles,
+  Sun,
   Heart,
   ArrowRight,
 } from "lucide-react"
@@ -77,6 +79,7 @@ export default function HomePage() {
   const [loadingTypingDone, setLoadingTypingDone] = useState(false)
   const typingTimeoutRef = useRef<number | null>(null)
   const loadingTypingTimeoutRef = useRef<number | null>(null)
+  const [theme, setTheme] = useState<"light" | "dark">("light")
 
   const [recentSearches, setRecentSearches] = useLocalStorageState<RouteEntry[]>(
     "triply:recentSearches",
@@ -90,6 +93,24 @@ export default function HomePage() {
     "triply:alerts",
     [],
   )
+
+  useEffect(() => {
+    const raw = window.localStorage.getItem("planair:theme")
+    const stored = raw === "dark" || raw === "light" ? raw : null
+    const preferred =
+      stored ??
+      (window.matchMedia?.("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light")
+
+    setTheme(preferred)
+    document.documentElement.classList.toggle("dark", preferred === "dark")
+  }, [])
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark")
+    window.localStorage.setItem("planair:theme", theme)
+  }, [theme])
 
   useEffect(() => {
     const raw = window.localStorage.getItem("planair:user")
@@ -193,6 +214,13 @@ export default function HomePage() {
     }
   }, [activeFilter])
   const loadingTitle = "Estamos reunindo as melhores oportunidades para voce."
+
+  const getThemeButtonClass = (value: "light" | "dark") =>
+    `flex items-center gap-2 rounded-xl px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] transition ${
+      theme === value
+        ? "bg-primary text-primary-foreground shadow-[0_12px_24px_-18px_rgba(15,23,42,0.4)]"
+        : "text-muted-foreground hover:text-foreground"
+    }`
 
   const handleScrollToSearchCard = () => {
     searchCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -447,14 +475,14 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-white dark:bg-slate-950">
       <Navbar />
 
       <main className="flex-1">
         <section className="relative overflow-hidden pb-6 pt-8 md:pt-10">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(217_91%_60%/0.10),transparent_60%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,250,252,0.96),rgba(255,255,255,1))]" />
-          <div className="absolute -top-20 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.14),transparent_62%)] blur-2xl" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(217_91%_60%/0.10),transparent_60%)] dark:bg-[radial-gradient(ellipse_at_top,rgba(56,189,248,0.14),transparent_60%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,250,252,0.96),rgba(255,255,255,1))] dark:bg-[linear-gradient(180deg,rgba(2,6,23,0.98),rgba(2,6,23,1))]" />
+          <div className="absolute -top-20 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.14),transparent_62%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.18),transparent_62%)]" />
 
           <div className="relative mx-auto w-full max-w-7xl px-4 lg:px-8">
             {/* WELCOME HERO (novo) */}
@@ -464,11 +492,11 @@ export default function HomePage() {
               transition={{ duration: 0.45, ease: "easeOut" }}
               className="mb-7"
             >
-              <div className="flex flex-col gap-5 rounded-3xl border border-border/60 bg-white/75 p-5 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.35)] backdrop-blur-xl md:p-6">
+              <div className="flex flex-col gap-5 rounded-3xl border border-border/60 bg-white/75 p-5 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.35)] backdrop-blur-xl md:p-6 dark:bg-slate-900/75 dark:shadow-[0_24px_80px_-50px_rgba(15,23,42,0.65)]">
                 <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-white/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-white/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground dark:bg-slate-900/70">
                         <span className="relative flex h-2.5 w-2.5">
                           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/40" />
                           <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary/75" />
@@ -477,7 +505,7 @@ export default function HomePage() {
                       </span>
 
                       {todayLabel ? (
-                        <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-white/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-white/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground dark:bg-slate-900/70">
                           <Calendar className="h-3.5 w-3.5 text-primary" />
                           {todayLabel}
                         </span>
@@ -499,11 +527,31 @@ export default function HomePage() {
                   </div>
 
                   <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+                    <div className="flex items-center gap-1 rounded-2xl border border-border/70 bg-white/70 p-1 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground shadow-[0_12px_30px_-26px_rgba(15,23,42,0.25)] dark:bg-slate-900/70">
+                      <button
+                        type="button"
+                        onClick={() => setTheme("light")}
+                        aria-pressed={theme === "light"}
+                        className={getThemeButtonClass("light")}
+                      >
+                        <Sun className="h-4 w-4" />
+                        Claro
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTheme("dark")}
+                        aria-pressed={theme === "dark"}
+                        className={getThemeButtonClass("dark")}
+                      >
+                        <Moon className="h-4 w-4" />
+                        Escuro
+                      </button>
+                    </div>
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => router.push("/alerts")}
-                      className="rounded-2xl border-border/70 bg-white/70 shadow-[0_16px_40px_-34px_rgba(15,23,42,0.25)]"
+                      className="rounded-2xl border-border/70 bg-white/70 shadow-[0_16px_40px_-34px_rgba(15,23,42,0.25)] dark:bg-slate-900/70"
                     >
                       <Bell className="h-4 w-4" />
                       Ver alertas
@@ -522,7 +570,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="grid gap-3 md:grid-cols-3">
-                  <div className="rounded-2xl border border-border/60 bg-white/70 p-4 shadow-[0_18px_50px_-44px_rgba(15,23,42,0.25)]">
+                  <div className="rounded-2xl border border-border/60 bg-white/70 p-4 shadow-[0_18px_50px_-44px_rgba(15,23,42,0.25)] dark:bg-slate-900/70">
                     <div className="flex items-center justify-between">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
                         Favoritos
@@ -537,7 +585,7 @@ export default function HomePage() {
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border border-border/60 bg-white/70 p-4 shadow-[0_18px_50px_-44px_rgba(15,23,42,0.25)]">
+                  <div className="rounded-2xl border border-border/60 bg-white/70 p-4 shadow-[0_18px_50px_-44px_rgba(15,23,42,0.25)] dark:bg-slate-900/70">
                     <div className="flex items-center justify-between">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
                         Alertas ativos
@@ -552,7 +600,7 @@ export default function HomePage() {
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border border-border/60 bg-white/70 p-4 shadow-[0_18px_50px_-44px_rgba(15,23,42,0.25)]">
+                  <div className="rounded-2xl border border-border/60 bg-white/70 p-4 shadow-[0_18px_50px_-44px_rgba(15,23,42,0.25)] dark:bg-slate-900/70">
                     <div className="flex items-center justify-between">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
                         Recentes
@@ -569,7 +617,7 @@ export default function HomePage() {
                 </div>
 
                 {lastRecent ? (
-                  <div className="flex flex-col gap-2 rounded-2xl border border-border/60 bg-white/60 p-4 md:flex-row md:items-center md:justify-between">
+                  <div className="flex flex-col gap-2 rounded-2xl border border-border/60 bg-white/60 p-4 md:flex-row md:items-center md:justify-between dark:bg-slate-900/60">
                     <p className="text-sm text-muted-foreground">
                       Última rota:{" "}
                       <span className="font-semibold text-foreground">
@@ -588,7 +636,7 @@ export default function HomePage() {
                       type="button"
                       variant="outline"
                       onClick={() => handleRepeatSearch(lastRecent)}
-                      className="rounded-2xl border-border/70 bg-white/70"
+                      className="rounded-2xl border-border/70 bg-white/70 dark:bg-slate-900/70"
                     >
                       <Search className="h-4 w-4" />
                       Repetir agora
@@ -618,7 +666,7 @@ export default function HomePage() {
                 title="O que voce quer planejar hoje?"
                 description="Monte uma nova rota e acompanhe as ofertas em tempo real."
                 headerRight={
-                  <div className="hidden items-center gap-2 rounded-2xl border border-border/60 bg-white/80 px-3 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground shadow-[0_12px_30px_-28px_rgba(15,23,42,0.2)] md:flex">
+                  <div className="hidden items-center gap-2 rounded-2xl border border-border/60 bg-white/80 px-3 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground shadow-[0_12px_30px_-28px_rgba(15,23,42,0.2)] md:flex dark:bg-slate-900/80">
                     <Sparkles className="h-4 w-4 text-primary" />
                     Premium
                   </div>
@@ -638,9 +686,9 @@ export default function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className="rounded-3xl border border-border/60 bg-white/80 p-6 shadow-[0_22px_70px_-50px_rgba(15,23,42,0.35)] backdrop-blur-xl md:p-8"
+                className="rounded-3xl border border-border/60 bg-white/80 p-6 shadow-[0_22px_70px_-50px_rgba(15,23,42,0.35)] backdrop-blur-xl md:p-8 dark:bg-slate-900/80"
               >
-                <div className="pointer-events-none absolute inset-0 rounded-3xl bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.12),transparent_60%)]" />
+                <div className="pointer-events-none absolute inset-0 rounded-3xl bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.12),transparent_60%)] dark:bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.18),transparent_60%)]" />
                 <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                   <div className="flex items-start gap-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
@@ -669,7 +717,7 @@ export default function HomePage() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-white/80 px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground shadow-[0_16px_40px_-32px_rgba(15,23,42,0.25)]">
+                  <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-white/80 px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground shadow-[0_16px_40px_-32px_rgba(15,23,42,0.25)] dark:bg-slate-900/80">
                     <span
                       className={
                         isLoading
@@ -1012,7 +1060,7 @@ export default function HomePage() {
 
               {(activeFilter === "voos" || activeFilter === "hoteis") && (
                 <section className="mx-auto w-full max-w-7xl px-4 pb-16 lg:px-8">
-                  <div className="rounded-3xl border border-border/60 bg-white/70 p-6 text-sm text-muted-foreground shadow-[0_18px_60px_-42px_rgba(15,23,42,0.2)]">
+                  <div className="rounded-3xl border border-border/60 bg-white/70 p-6 text-sm text-muted-foreground shadow-[0_18px_60px_-42px_rgba(15,23,42,0.2)] dark:bg-slate-900/70">
                     Faça uma pesquisa para ver resultados de{" "}
                     {activeFilter === "voos" ? "voos" : "hoteis"}.
                   </div>

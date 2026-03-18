@@ -37,7 +37,7 @@ export default function Favorites({ items, onRemove }: FavoritesProps) {
       </div>
 
       {items.length === 0 ? (
-        <Card className="rounded-3xl border border-border/60 bg-white/70 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]">
+        <Card className="rounded-3xl border border-border/60 bg-white/70 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/70">
           <CardContent className="p-6 text-sm text-muted-foreground">
             Voce ainda nao adicionou favoritos. Salve rotas para comparar mais
             rapido.
@@ -52,7 +52,7 @@ export default function Favorites({ items, onRemove }: FavoritesProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: index * 0.05 }}
             >
-              <Card className="rounded-3xl border border-border/60 bg-white/85 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]">
+              <Card className="rounded-3xl border border-border/60 bg-white/85 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/80">
                 <CardContent className="space-y-2 p-5">
                   <p className="text-sm font-semibold text-foreground">
                     {item.origin} → {item.destination}

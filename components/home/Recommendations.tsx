@@ -47,7 +47,7 @@ export default function Recommendations({
                 {personalized.map((item) => (
                   <Card
                     key={item}
-                    className="rounded-3xl border border-border/60 bg-white/80 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]"
+                    className="rounded-3xl border border-border/60 bg-white/80 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/80"
                   >
                     <CardContent className="flex items-center gap-3 p-5">
                       <TrendingUp className="h-4 w-4 text-primary" />
@@ -59,7 +59,7 @@ export default function Recommendations({
                 ))}
               </div>
             ) : (
-              <Card className="rounded-3xl border border-border/60 bg-white/70 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]">
+              <Card className="rounded-3xl border border-border/60 bg-white/70 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/70">
                 <CardContent className="p-6 text-sm text-muted-foreground">
                   Busque mais rotas para receber recomendacoes personalizadas.
                 </CardContent>
@@ -75,7 +75,7 @@ export default function Recommendations({
               {general.map((item) => (
                 <Card
                   key={item}
-                  className="rounded-3xl border border-border/60 bg-white/80 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]"
+                  className="rounded-3xl border border-border/60 bg-white/80 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/80"
                 >
                   <CardContent className="flex items-center gap-3 p-5">
                     <TrendingUp className="h-4 w-4 text-primary" />

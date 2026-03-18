@@ -61,7 +61,7 @@ export default function PriceAlerts({
         </div>
       </div>
 
-      <Card className="rounded-3xl border border-border/60 bg-white/80 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]">
+      <Card className="rounded-3xl border border-border/60 bg-white/80 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/80">
         <CardContent className="space-y-4 p-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
@@ -96,11 +96,11 @@ export default function PriceAlerts({
               value={targetPrice}
               onChange={(event) => setTargetPrice(event.target.value)}
               placeholder="Preço alvo opcional"
-              className="rounded-2xl border border-border/60 bg-white/80 px-4 py-2.5 text-sm shadow-[0_12px_32px_-26px_rgba(15,23,42,0.18)] focus-visible:ring-primary/20"
+              className="rounded-2xl border border-border/60 bg-white/80 px-4 py-2.5 text-sm shadow-[0_12px_32px_-26px_rgba(15,23,42,0.18)] focus-visible:ring-primary/20 dark:bg-slate-900/80"
             />
             <Button
               variant="outline"
-              className="rounded-2xl border-border/60 bg-white/80 shadow-[0_12px_32px_-26px_rgba(15,23,42,0.18)]"
+              className="rounded-2xl border-border/60 bg-white/80 shadow-[0_12px_32px_-26px_rgba(15,23,42,0.18)] dark:bg-slate-900/80"
               onClick={() =>
                 onCreate(targetPrice ? Number(targetPrice) : undefined)
               }
@@ -115,7 +115,7 @@ export default function PriceAlerts({
       <Separator />
 
       {alerts.length === 0 ? (
-        <Card className="rounded-3xl border border-border/60 bg-white/70 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]">
+        <Card className="rounded-3xl border border-border/60 bg-white/70 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/70">
           <CardContent className="p-6 text-sm text-muted-foreground">
             Nenhum alerta configurado. Ative alertas para acompanhar os preços.
           </CardContent>
@@ -129,7 +129,7 @@ export default function PriceAlerts({
             {alerts.map((alert) => (
               <Card
                 key={alert.id}
-                className="rounded-3xl border border-border/60 bg-white/85 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]"
+                className="rounded-3xl border border-border/60 bg-white/85 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/80"
               >
                 <CardContent className="space-y-3 p-5">
                   <div className="flex items-center justify-between">

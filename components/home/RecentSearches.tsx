@@ -64,7 +64,7 @@ export default function RecentSearches({
       </div>
 
       {items.length === 0 ? (
-        <Card className="rounded-3xl border border-border/60 bg-white/70 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]">
+        <Card className="rounded-3xl border border-border/60 bg-white/70 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/70">
           <CardContent className="flex flex-col items-start gap-3 p-6 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-sm font-semibold text-foreground">
@@ -92,7 +92,7 @@ export default function RecentSearches({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: index * 0.05 }}
             >
-              <Card className="rounded-3xl border border-border/60 bg-white/80 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)]">
+              <Card className="rounded-3xl border border-border/60 bg-white/80 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/80">
                 <CardContent className="space-y-4 p-5">
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -171,4 +171,3 @@ export default function RecentSearches({
     </section>
   )
 }
-
