@@ -29,6 +29,12 @@ export default function LoginPage() {
   }
   const storageKey = "planair:user"
 
+  const handleUseMockLogin = () => {
+    setMode("login")
+    setEmail(mockAccount.email)
+    setPassword(mockAccount.password)
+  }
+
   const handleLogin = async () => {
     if (isSubmitting) return
     const normalizedEmail = email.trim().toLowerCase()
@@ -163,6 +169,33 @@ export default function LoginPage() {
                         Entre para acompanhar suas buscas, alertas e ofertas
                         favoritas.
                       </p>
+
+                      <div className="mt-5 rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(37,99,235,0.35)]">
+                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary/70">
+                          Acesso demo
+                        </p>
+                        <div className="mt-2 space-y-1 text-sm">
+                          <p className="text-muted-foreground">
+                            Email:{" "}
+                            <span className="font-semibold text-foreground">
+                              {mockAccount.email}
+                            </span>
+                          </p>
+                          <p className="text-muted-foreground">
+                            Senha:{" "}
+                            <span className="font-semibold text-foreground">
+                              {mockAccount.password}
+                            </span>
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleUseMockLogin}
+                          className="mt-3 w-full rounded-lg border border-primary/30 bg-white/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-primary shadow-[0_10px_26px_-20px_rgba(37,99,235,0.35)] transition hover:-translate-y-0.5 hover:bg-white"
+                        >
+                          Usar login demo
+                        </button>
+                      </div>
 
                       <div className="mt-8 space-y-4">
                         <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
