@@ -79,8 +79,6 @@ export default function HomePageClient() {
   const [loadingTypingDone, setLoadingTypingDone] = useState(false)
   const typingTimeoutRef = useRef<number | null>(null)
   const loadingTypingTimeoutRef = useRef<number | null>(null)
-  const [theme, setTheme] = useState<"light" | "dark">("light")
-
   const [recentSearches, setRecentSearches] = useLocalStorageState<RouteEntry[]>(
     "triply:recentSearches",
     [],
@@ -93,24 +91,6 @@ export default function HomePageClient() {
     "triply:alerts",
     [],
   )
-
-  useEffect(() => {
-    const raw = window.localStorage.getItem("planair:theme")
-    const stored = raw === "dark" || raw === "light" ? raw : null
-    const preferred =
-      stored ??
-      (window.matchMedia?.("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light")
-
-    setTheme(preferred)
-    document.documentElement.classList.toggle("dark", preferred === "dark")
-  }, [])
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark")
-    window.localStorage.setItem("planair:theme", theme)
-  }, [theme])
 
   useEffect(() => {
     const raw = window.localStorage.getItem("planair:user")
@@ -215,9 +195,9 @@ export default function HomePageClient() {
   }, [activeFilter])
   const loadingTitle = "Estamos reunindo as melhores oportunidades para voce."
 
-  const getThemeButtonClass = (value: "light" | "dark") =>
+  const getThemeButtonClass = (value: "light") =>
     `flex items-center gap-2 rounded-xl px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] transition ${
-      theme === value
+      value === "light"
         ? "bg-primary text-primary-foreground shadow-[0_12px_24px_-18px_rgba(15,23,42,0.4)]"
         : "text-muted-foreground hover:text-foreground"
     }`
@@ -530,21 +510,11 @@ export default function HomePageClient() {
                     <div className="flex items-center gap-1 rounded-2xl border border-border/70 bg-white/70 p-1 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground shadow-[0_12px_30px_-26px_rgba(15,23,42,0.25)] dark:bg-slate-900/70">
                       <button
                         type="button"
-                        onClick={() => setTheme("light")}
-                        aria-pressed={theme === "light"}
+                        aria-pressed
                         className={getThemeButtonClass("light")}
                       >
                         <Sun className="h-4 w-4" />
                         Claro
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setTheme("dark")}
-                        aria-pressed={theme === "dark"}
-                        className={getThemeButtonClass("dark")}
-                      >
-                        <Moon className="h-4 w-4" />
-                        Escuro
                       </button>
                     </div>
                     <Button
