@@ -346,7 +346,6 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile dropdown */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
