@@ -35,7 +35,10 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const router = useRouter()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [user, setUser] = useState({ name: "Jeferson", plan: "free" as const })
+  const [user, setUser] = useState<{
+    name: string
+    plan: "free" | "premium"
+  }>({ name: "Jeferson", plan: "free" })
   const unreadAlertsCount = 2
 
   const notifications = [
