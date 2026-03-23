@@ -10,22 +10,22 @@ import { TrendingDown } from "lucide-react"
 
 const scrollHeroSteps = [
   {
-    badge: "Precos exclusivos disponiveis",
-    title: "Planeje sua proxima viagem em minutos",
-    desc: "Busque voos e hoteis no mesmo lugar, com precos atualizados em tempo real.",
+    badge: "Preços exclusivos disponíveis",
+    title: "Planeje sua próxima viagem em minutos",
+    desc: "Busque voos e hóteis no mesmo lugar, com preços atualizados em tempo real.",
     cta: "Digite origem e destino para comecar",
   },
   {
-    badge: "Comparacao inteligente",
-    title: "Compare opcoes e encontre o melhor custo-beneficio",
+    badge: "Comparação de preço inteligente",
+    title: "Compare opções e encontre o melhor custo-benefício",
     desc: "Filtre por datas, passageiros e veja ofertas que realmente valem a pena.",
-    cta: "Ajuste as datas e veja as melhores combinacoes",
+    cta: "Ajuste as datas e veja as melhores combinações",
   },
   {
-    badge: "Atualizacao constante",
-    title: "Precos mudam rapido - voce ve primeiro",
+    badge: "Atualização constante",
+    title: "Preços mudam rápido - você vê primeiro",
     desc: "A cada busca, trazemos ofertas recentes direto das fontes.",
-    cta: "Faca uma busca agora e veja resultados",
+    cta: "Faça uma busca agora e veja resultados",
   },
   {
     badge: "Pronto para decolar",
