@@ -153,7 +153,7 @@ export default function FavoritesPage() {
                         key={item.id}
                         className="rounded-3xl border border-border/60 bg-white/80 p-5 shadow-[0_18px_60px_-44px_rgba(15,23,42,0.25)] backdrop-blur-xl"
                       >
-                        <div className="flex items-start justify-between gap-3">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                           <div>
                             <p className="text-sm font-semibold text-foreground">
                               {item.route}
@@ -190,7 +190,7 @@ export default function FavoritesPage() {
                             </span>
                           </p>
                         </div>
-                        <div className="mt-4 flex items-center justify-between">
+                        <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                           <Button
                             size="sm"
                             variant="outline"

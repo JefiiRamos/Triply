@@ -170,7 +170,7 @@ export default function HistoryPage() {
                       key={item.id}
                       className="rounded-2xl border border-border/60 bg-white/80 p-4 shadow-[0_16px_50px_-44px_rgba(15,23,42,0.2)] backdrop-blur-xl"
                     >
-                      <div className="flex items-start justify-between gap-3">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                           <p className="text-sm font-semibold text-foreground">
                             {item.origin} → {item.destination}
@@ -246,7 +246,7 @@ export default function HistoryPage() {
                       key={item.name}
                       className="rounded-2xl border border-border/60 bg-white/80 p-4 shadow-[0_16px_50px_-44px_rgba(15,23,42,0.2)] backdrop-blur-xl"
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <p className="text-sm font-semibold text-foreground">
                           {item.name}
                         </p>

@@ -75,7 +75,7 @@ export default function DailyDeals({
             >
               <Card className="rounded-3xl border border-border/60 bg-white/85 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/80">
                 <CardContent className="space-y-4 p-5">
-                  <div className="flex items-start justify-between">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/70">
                         {deal.origin} → {deal.destination}
@@ -98,7 +98,7 @@ export default function DailyDeals({
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <Button
                       size="sm"
                       className="rounded-2xl"

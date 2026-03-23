@@ -61,7 +61,7 @@ export default function Favorites({ items, onRemove }: FavoritesProps) {
                     {item.dateFrom || "Data flexivel"} ·{" "}
                     {item.dateTo || "Sem volta"}
                   </p>
-                  <div className="flex items-center justify-between pt-2">
+                  <div className="flex flex-col gap-2 pt-2 sm:flex-row sm:items-center sm:justify-between">
                     <span className="text-xs text-muted-foreground">
                       {item.passengers} pax
                     </span>

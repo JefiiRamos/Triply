@@ -32,7 +32,7 @@ export default function Recommendations({
       </div>
 
       <Tabs defaultValue={showPersonalized ? "personalized" : "general"}>
-        <TabsList className="rounded-2xl">
+      <TabsList className="flex flex-wrap gap-2 rounded-2xl">
           <TabsTrigger value="personalized">Para voce</TabsTrigger>
           <TabsTrigger value="general">Sugestoes gerais</TabsTrigger>
         </TabsList>

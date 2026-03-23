@@ -132,7 +132,7 @@ export default function PriceAlerts({
                 className="rounded-3xl border border-border/60 bg-white/85 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/80"
               >
                 <CardContent className="space-y-3 p-5">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <p className="text-sm font-semibold text-foreground">
                       {alert.origin} → {alert.destination}
                     </p>
@@ -148,7 +148,7 @@ export default function PriceAlerts({
                       ? `R$ ${alert.targetPrice.toLocaleString("pt-BR")}`
                       : "Não definido"}
                   </p>
-                  <div className="flex items-center justify-between pt-2">
+                  <div className="flex flex-col gap-2 pt-2 sm:flex-row sm:items-center sm:justify-between">
                     <Button
                       size="sm"
                       variant="outline"

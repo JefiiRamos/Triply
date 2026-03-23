@@ -23,7 +23,7 @@ export default function PremiumBanner() {
                 avancadas.
               </p>
             </div>
-            <Button className="rounded-2xl">
+            <Button className="w-full rounded-2xl sm:w-auto">
               <Sparkles className="h-4 w-4" />
               Experimentar Premium
             </Button>

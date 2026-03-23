@@ -81,7 +81,7 @@ export default function PremiumPage() {
                     initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.35, ease: "easeOut" }}
-                    className="space-y-4"
+                    className="order-2 space-y-4 lg:order-1"
                   >
                     <div className="space-y-3">
                       <Button
@@ -137,7 +137,7 @@ export default function PremiumPage() {
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35, ease: "easeOut", delay: 0.05 }}
-                    className="flex flex-col gap-6"
+                    className="order-1 flex flex-col gap-6 lg:order-2"
                   >
                     {/* <div className="chat-header rounded-3xl border border-border/60 bg-white/70 p-6 shadow-[0_22px_70px_-50px_rgba(15,23,42,0.3)]">
                       <div className="flex items-start gap-4">
@@ -164,7 +164,7 @@ export default function PremiumPage() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.35, ease: "easeOut" }}
-                      className="chat-history relative min-h-[520px] rounded-3xl border border-border/60 bg-white/40 px-4 py-6 shadow-[0_22px_70px_-50px_rgba(15,23,42,0.12)]"
+                      className="chat-history relative min-h-[360px] rounded-3xl border border-border/60 bg-white/40 px-4 py-5 shadow-[0_22px_70px_-50px_rgba(15,23,42,0.12)] sm:min-h-[420px] sm:px-5 sm:py-6 lg:min-h-[520px]"
                     >
                       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                         <OrbLayer className="opacity-50" size={520} />
@@ -191,7 +191,7 @@ export default function PremiumPage() {
                         <div className="chat-composer group relative z-10 w-full">
                           <div className="pointer-events-none absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 opacity-0 blur transition-opacity duration-300 group-focus-within:opacity-100" />
 
-                          <div className="relative flex items-center gap-3 rounded-2xl border border-border/70 bg-white/75 p-3 shadow-[0_16px_50px_-40px_rgba(15,23,42,0.25)]">
+                          <div className="relative flex flex-col gap-3 rounded-2xl border border-border/70 bg-white/75 p-3 shadow-[0_16px_50px_-40px_rgba(15,23,42,0.25)] sm:flex-row sm:items-center">
                             <button
                               type="button"
                               onClick={() => setIsAttachOpen((open) => !open)}
@@ -208,7 +208,7 @@ export default function PremiumPage() {
 
                             <Button
                               type="button"
-                              className="rounded-2xl px-5 shadow-[0_16px_36px_-20px_rgba(37,99,235,0.5)]"
+                              className="w-full rounded-2xl px-5 shadow-[0_16px_36px_-20px_rgba(37,99,235,0.5)] sm:w-auto"
                             >
                               Enviar
                             </Button>
@@ -219,7 +219,7 @@ export default function PremiumPage() {
                               initial={{ opacity: 0, y: 8, scale: 0.98 }}
                               animate={{ opacity: 1, y: 0, scale: 1 }}
                               transition={{ duration: 0.2, ease: "easeOut" }}
-                              className="absolute left-0 top-full z-20 mt-3 w-[240px] rounded-2xl border border-border/60 bg-white/95 p-2 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.25)]"
+                              className="absolute left-0 top-full z-20 mt-3 w-full rounded-2xl border border-border/60 bg-white/95 p-2 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.25)] sm:w-[240px]"
                             >
                               <button
                                 type="button"
@@ -279,7 +279,7 @@ export default function PremiumPage() {
                         Sugestoes rapidas
                       </p>
 
-                      <div className="grid gap-3 md:grid-cols-3">
+                      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                         {suggestions.map((item) => (
                           <motion.button
                             key={item}

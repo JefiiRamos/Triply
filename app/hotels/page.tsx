@@ -22,7 +22,7 @@ export default function HotelsPage() {
               transition={{ duration: 0.45, ease: "easeOut" }}
               className="rounded-3xl border border-border/60 bg-white/85 p-6 shadow-[0_24px_80px_-55px_rgba(15,23,42,0.35)] backdrop-blur-xl md:p-8"
             >
-              <div className="flex items-start justify-between gap-6">
+              <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
                     Hoteis

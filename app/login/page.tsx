@@ -245,7 +245,7 @@ export default function LoginPage() {
                         </label>
                       </div>
 
-                      <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
+                      <div className="mt-4 flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
                         <label className="flex items-center gap-2">
                           <input
                             type="checkbox"

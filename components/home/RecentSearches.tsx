@@ -44,7 +44,7 @@ export default function RecentSearches({
 }: RecentSearchesProps) {
   return (
     <section className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
             <Clock className="h-5 w-5 text-primary" />
@@ -94,7 +94,7 @@ export default function RecentSearches({
             >
               <Card className="rounded-3xl border border-border/60 bg-white/80 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.2)] dark:bg-slate-900/80">
                 <CardContent className="space-y-4 p-5">
-                  <div className="flex items-start justify-between gap-2">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                       <p className="text-sm font-semibold text-foreground">
                         {item.origin} → {item.destination}
@@ -109,7 +109,7 @@ export default function RecentSearches({
                     </Badge>
                   </div>
 
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <Button
                       size="sm"
                       variant="outline"

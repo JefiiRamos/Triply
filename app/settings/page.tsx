@@ -189,7 +189,7 @@ export default function SettingsPage() {
                     title="Idioma e região"
                     description="Defina o idioma principal, formato de data e localidade da plataforma."
                     action={
-                      <div className="min-w-[240px]">
+                    <div className="w-full sm:min-w-[240px]">
                         <AppSelect
                           value={language}
                           onValueChange={setLanguage}
@@ -205,7 +205,7 @@ export default function SettingsPage() {
                     title="Moeda padrão"
                     description="Escolha como os preços de voos, hotéis e ofertas serão exibidos."
                     action={
-                      <div className="min-w-[240px]">
+                    <div className="w-full sm:min-w-[240px]">
                         <AppSelect
                           value={currency}
                           onValueChange={setCurrency}
@@ -294,7 +294,7 @@ export default function SettingsPage() {
                 >
                   <div className="grid gap-4">
                     <button className="group rounded-2xl border border-primary/30 bg-primary/5 p-4 text-left transition hover:border-primary/50 hover:bg-primary/10">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-start gap-3">
                           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-primary shadow-sm">
                             <Sun className="h-5 w-5" />
@@ -314,7 +314,7 @@ export default function SettingsPage() {
                     </button>
 
                     <button className="group rounded-2xl border border-border/60 bg-white/80 p-4 text-left transition hover:border-primary/30 hover:bg-primary/5">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-start gap-3">
                           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">
                             <Moon className="h-5 w-5" />
@@ -332,7 +332,7 @@ export default function SettingsPage() {
                     </button>
 
                     <button className="group rounded-2xl border border-border/60 bg-white/80 p-4 text-left transition hover:border-primary/30 hover:bg-primary/5">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-start gap-3">
                           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">
                             <Monitor className="h-5 w-5" />

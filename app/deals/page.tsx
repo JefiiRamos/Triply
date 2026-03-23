@@ -42,7 +42,7 @@ export default function DealsPage() {
                 ].map((item) => (
                   <div
                     key={item.title}
-                    className="flex items-center justify-between rounded-2xl border border-border/60 bg-white/80 p-4 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.2)]"
+                    className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-white/80 p-4 text-sm text-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.2)] sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div>
                       <p className="font-semibold">{item.title}</p>

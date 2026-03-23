@@ -355,52 +355,99 @@ export default function Navbar() {
             transition={{ duration: 0.28, ease: "easeOut" }}
             className="overflow-hidden px-4 pb-4 md:hidden"
           >
-            <div className="flex flex-col gap-2 rounded-2xl border border-border/60 bg-white/80 p-4 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.35)] backdrop-blur-xl">
-              {[
-                { label: "Tudo", href: "/home" },
-                { label: "Voos", href: "/home?filter=voos" },
-                { label: "Hoteis", href: "/home?filter=hoteis" },
-                { label: "Ofertas", href: "/home?filter=ofertas" },
-                ...(isLoggedIn
-                  ? [
-                      { label: "Favoritos", href: "/home?filter=favoritos" },
-                      { label: "Alertas", href: "/home?filter=alertas" },
-                    ]
-                  : []),
-              ].map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  scroll={false}
-                  className="rounded-xl px-3 py-2 text-sm font-medium text-muted-foreground transition
-                             hover:bg-white/70 hover:text-foreground"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
-
+            <div className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-white/80 p-4 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.35)] backdrop-blur-xl">
               {isLoggedIn ? (
-                <div className="mt-1 flex flex-col gap-2 rounded-xl border border-border/60 bg-white/80 px-4 py-3 text-sm font-semibold text-foreground">
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      <CircleUser className="h-4 w-4" />
-                    </span>
-                    <span className="truncate">{user.name}</span>
+                <>
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                    Conta
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-xl"
-                    onClick={handleSignOut}
+                  {[
+                    { label: "Meu perfil", href: "/profile", icon: User },
+                    { label: "Minhas viagens", href: "/trips", icon: Plane },
+                    { label: "Historico de pesquisas", href: "/history", icon: Clock },
+                  ].map((item) => {
+                    const Icon = item.icon
+                    return (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-foreground transition hover:bg-white/70"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <Icon className="h-4 w-4 text-muted-foreground" />
+                        {item.label}
+                      </Link>
+                    )
+                  })}
+
+                  <div className="pt-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                    Organizacao
+                  </div>
+                  {[
+                    { label: "Favoritos", href: "/favorites", icon: Heart },
+                    { label: "Alertas de preco", href: "/alerts", icon: Bell },
+                  ].map((item) => {
+                    const Icon = item.icon
+                    return (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-foreground transition hover:bg-white/70"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <Icon className="h-4 w-4 text-muted-foreground" />
+                        {item.label}
+                      </Link>
+                    )
+                  })}
+
+                  <div className="pt-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                    Premium
+                  </div>
+                  <Link
+                    href="/premium"
+                    className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-foreground transition hover:bg-white/70"
+                    onClick={() => setMobileOpen(false)}
                   >
+                    <Sparkles className="h-4 w-4 text-primary" />
+                    Triply Premium
+                    <Badge className="ml-auto rounded-full text-[10px]">PRO</Badge>
+                  </Link>
+
+                  <div className="pt-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                    Sistema
+                  </div>
+                  {[
+                    { label: "Configuracoes", href: "/settings", icon: Settings },
+                    { label: "Central de ajuda", href: "/help", icon: HelpCircle },
+                  ].map((item) => {
+                    const Icon = item.icon
+                    return (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-foreground transition hover:bg-white/70"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <Icon className="h-4 w-4 text-muted-foreground" />
+                        {item.label}
+                      </Link>
+                    )
+                  })}
+
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-foreground transition hover:bg-white/70"
+                  >
+                    <LogOut className="h-4 w-4 text-muted-foreground" />
                     Sair
-                  </Button>
-                </div>
+                  </button>
+                </>
               ) : (
                 <Link
                   href="/login"
-                  className="mt-1 rounded-xl bg-primary px-5 py-2.5 text-center text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+                  className="rounded-xl bg-primary px-5 py-2.5 text-center text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
                   onClick={() => setMobileOpen(false)}
                 >
                   Entrar
