@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react"
+import { type ReactNode, useEffect, useMemo, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import {
   Bell,
@@ -13,6 +13,7 @@ import {
   Sun,
   Heart,
   ArrowRight,
+  type LucideIcon,
 } from "lucide-react"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
@@ -55,6 +56,49 @@ type AlertEntry = {
   destination: string
   targetPrice?: number
   status: "ativo" | "pausado"
+}
+
+type HomeSectionShellProps = {
+  eyebrow: string
+  title: string
+  description: string
+  icon: LucideIcon
+  children: ReactNode
+  className?: string
+}
+
+function HomeSectionShell({
+  eyebrow,
+  title,
+  description,
+  icon: Icon,
+  children,
+  className = "",
+}: HomeSectionShellProps) {
+  return (
+    <section
+      className={`relative overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white/72 p-4 shadow-[0_28px_90px_-56px_rgba(15,23,42,0.3)] backdrop-blur-xl dark:border-sky-400/10 dark:bg-slate-900/55 dark:shadow-[0_30px_90px_-54px_rgba(2,6,23,0.85)] md:p-5 ${className}`}
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.1),transparent_60%)] dark:bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.12),transparent_58%)]" />
+      <div className="relative mb-5 flex items-start gap-3 border-b border-slate-200/80 pb-4 dark:border-white/10">
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 ring-1 ring-primary/10 dark:bg-sky-400/10 dark:ring-sky-300/10">
+          <Icon className="h-5 w-5 text-primary dark:text-sky-300" />
+        </div>
+        <div className="min-w-0">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary/75 dark:text-sky-300/75">
+            {eyebrow}
+          </p>
+          <h2 className="mt-1 text-xl font-semibold text-foreground dark:text-slate-100">
+            {title}
+          </h2>
+          <p className="mt-1 max-w-2xl text-sm text-muted-foreground dark:text-slate-400">
+            {description}
+          </p>
+        </div>
+      </div>
+      <div className="relative">{children}</div>
+    </section>
+  )
 }
 
 export default function HomePage() {
@@ -218,8 +262,8 @@ export default function HomePage() {
   const getThemeButtonClass = (value: "light" | "dark") =>
     `flex items-center gap-2 rounded-xl px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] transition ${
       theme === value
-        ? "bg-primary text-primary-foreground shadow-[0_12px_24px_-18px_rgba(15,23,42,0.4)]"
-        : "text-muted-foreground hover:text-foreground"
+        ? "bg-primary text-primary-foreground shadow-[0_12px_24px_-18px_rgba(15,23,42,0.4)] dark:bg-sky-400 dark:text-slate-950"
+        : "text-muted-foreground hover:text-foreground dark:text-slate-400 dark:hover:text-slate-100"
     }`
 
   const handleScrollToSearchCard = () => {
@@ -475,14 +519,19 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-white dark:bg-slate-950">
+    <div className="flex min-h-screen flex-col bg-white dark:bg-[#020617]">
       <Navbar />
 
-      <main className="flex-1">
+      <main className="relative flex-1 overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 hidden dark:block">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(14,165,233,0.16),transparent_32%),radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.12),transparent_24%),linear-gradient(180deg,#020617_0%,#050b16_48%,#020617_100%)]" />
+          <div className="absolute inset-x-0 top-0 h-[720px] bg-[linear-gradient(rgba(148,163,184,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.05)_1px,transparent_1px)] bg-[size:44px_44px] [mask-image:linear-gradient(180deg,rgba(0,0,0,0.65),transparent)]" />
+        </div>
         <section className="relative overflow-hidden pb-6 pt-8 md:pt-10">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(217_91%_60%/0.10),transparent_60%)] dark:bg-[radial-gradient(ellipse_at_top,rgba(56,189,248,0.14),transparent_60%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,250,252,0.96),rgba(255,255,255,1))] dark:bg-[linear-gradient(180deg,rgba(2,6,23,0.98),rgba(2,6,23,1))]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,250,252,0.96),rgba(255,255,255,1))] dark:bg-[linear-gradient(180deg,rgba(2,6,23,0.82),rgba(2,6,23,0.24)_58%,rgba(2,6,23,0))]" />
           <div className="absolute -top-20 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.14),transparent_62%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.18),transparent_62%)]" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-white dark:to-[#020617]" />
 
           <div className="relative mx-auto w-full max-w-7xl px-4 lg:px-8">
             {/* WELCOME HERO (novo) */}
@@ -492,11 +541,11 @@ export default function HomePage() {
               transition={{ duration: 0.45, ease: "easeOut" }}
               className="mb-7"
             >
-              <div className="flex flex-col gap-5 rounded-3xl border border-border/60 bg-white/75 p-5 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.35)] backdrop-blur-xl md:p-6 dark:bg-slate-900/75 dark:shadow-[0_24px_80px_-50px_rgba(15,23,42,0.65)]">
+              <div className="flex flex-col gap-5 rounded-3xl border border-border/60 bg-white/75 p-5 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.35)] backdrop-blur-xl md:p-6 dark:border-sky-400/10 dark:bg-slate-950/55 dark:shadow-[0_24px_80px_-42px_rgba(2,6,23,0.9)]">
                 <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-white/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground dark:bg-slate-900/70">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-white/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground dark:border-white/10 dark:bg-slate-900/75 dark:text-slate-300">
                         <span className="relative flex h-2.5 w-2.5">
                           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/40" />
                           <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary/75" />
@@ -505,8 +554,8 @@ export default function HomePage() {
                       </span>
 
                       {todayLabel ? (
-                        <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-white/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground dark:bg-slate-900/70">
-                          <Calendar className="h-3.5 w-3.5 text-primary" />
+                        <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-white/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground dark:border-white/10 dark:bg-slate-900/75 dark:text-slate-300">
+                          <Calendar className="h-3.5 w-3.5 text-primary dark:text-sky-300" />
                           {todayLabel}
                         </span>
                       ) : null}
@@ -527,7 +576,7 @@ export default function HomePage() {
                   </div>
 
                   <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-                    <div className="flex items-center gap-1 rounded-2xl border border-border/70 bg-white/70 p-1 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground shadow-[0_12px_30px_-26px_rgba(15,23,42,0.25)] dark:bg-slate-900/70">
+                    <div className="flex items-center gap-1 rounded-2xl border border-border/70 bg-white/70 p-1 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground shadow-[0_12px_30px_-26px_rgba(15,23,42,0.25)] dark:border-white/10 dark:bg-slate-900/75 dark:text-slate-400">
                       <button
                         type="button"
                         onClick={() => setTheme("light")}
@@ -551,7 +600,7 @@ export default function HomePage() {
                       type="button"
                       variant="outline"
                       onClick={() => router.push("/alerts")}
-                      className="rounded-2xl border-border/70 bg-white/70 shadow-[0_16px_40px_-34px_rgba(15,23,42,0.25)] dark:bg-slate-900/70"
+                      className="rounded-2xl border-border/70 bg-white/70 shadow-[0_16px_40px_-34px_rgba(15,23,42,0.25)] dark:border-white/10 dark:bg-slate-900/75 dark:text-slate-100"
                     >
                       <Bell className="h-4 w-4" />
                       Ver alertas
@@ -570,7 +619,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="grid gap-3 md:grid-cols-3">
-                  <div className="rounded-2xl border border-border/60 bg-white/70 p-4 shadow-[0_18px_50px_-44px_rgba(15,23,42,0.25)] dark:bg-slate-900/70">
+                  <div className="rounded-2xl border border-border/60 bg-white/70 p-4 shadow-[0_18px_50px_-44px_rgba(15,23,42,0.25)] dark:border-white/10 dark:bg-slate-900/75">
                     <div className="flex items-center justify-between">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
                         Favoritos
@@ -585,7 +634,7 @@ export default function HomePage() {
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border border-border/60 bg-white/70 p-4 shadow-[0_18px_50px_-44px_rgba(15,23,42,0.25)] dark:bg-slate-900/70">
+                  <div className="rounded-2xl border border-border/60 bg-white/70 p-4 shadow-[0_18px_50px_-44px_rgba(15,23,42,0.25)] dark:border-white/10 dark:bg-slate-900/75">
                     <div className="flex items-center justify-between">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
                         Alertas ativos
@@ -600,7 +649,7 @@ export default function HomePage() {
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border border-border/60 bg-white/70 p-4 shadow-[0_18px_50px_-44px_rgba(15,23,42,0.25)] dark:bg-slate-900/70">
+                  <div className="rounded-2xl border border-border/60 bg-white/70 p-4 shadow-[0_18px_50px_-44px_rgba(15,23,42,0.25)] dark:border-white/10 dark:bg-slate-900/75">
                     <div className="flex items-center justify-between">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
                         Recentes
@@ -617,7 +666,7 @@ export default function HomePage() {
                 </div>
 
                 {lastRecent ? (
-                  <div className="flex flex-col gap-2 rounded-2xl border border-border/60 bg-white/60 p-4 md:flex-row md:items-center md:justify-between dark:bg-slate-900/60">
+                  <div className="flex flex-col gap-2 rounded-2xl border border-border/60 bg-white/60 p-4 md:flex-row md:items-center md:justify-between dark:border-white/10 dark:bg-slate-900/70">
                     <p className="text-sm text-muted-foreground">
                       Última rota:{" "}
                       <span className="font-semibold text-foreground">
@@ -636,7 +685,7 @@ export default function HomePage() {
                       type="button"
                       variant="outline"
                       onClick={() => handleRepeatSearch(lastRecent)}
-                      className="rounded-2xl border-border/70 bg-white/70 dark:bg-slate-900/70"
+                      className="rounded-2xl border-border/70 bg-white/70 dark:border-white/10 dark:bg-slate-900/75 dark:text-slate-100"
                     >
                       <Search className="h-4 w-4" />
                       Repetir agora
@@ -666,7 +715,7 @@ export default function HomePage() {
                 title="O que voce quer planejar hoje?"
                 description="Monte uma nova rota e acompanhe as ofertas em tempo real."
                 headerRight={
-                  <div className="hidden items-center gap-2 rounded-2xl border border-border/60 bg-white/80 px-3 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground shadow-[0_12px_30px_-28px_rgba(15,23,42,0.2)] md:flex dark:bg-slate-900/80">
+                  <div className="hidden items-center gap-2 rounded-2xl border border-border/60 bg-white/80 px-3 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground shadow-[0_12px_30px_-28px_rgba(15,23,42,0.2)] md:flex dark:border-white/10 dark:bg-slate-900/75 dark:text-slate-300">
                     <Sparkles className="h-4 w-4 text-primary" />
                     Premium
                   </div>
@@ -686,7 +735,7 @@ export default function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className="rounded-3xl border border-border/60 bg-white/80 p-6 shadow-[0_22px_70px_-50px_rgba(15,23,42,0.35)] backdrop-blur-xl md:p-8 dark:bg-slate-900/80"
+                className="relative rounded-3xl border border-border/60 bg-white/80 p-6 shadow-[0_22px_70px_-50px_rgba(15,23,42,0.35)] backdrop-blur-xl md:p-8 dark:border-sky-400/10 dark:bg-slate-950/55 dark:shadow-[0_26px_80px_-48px_rgba(2,6,23,0.88)]"
               >
                 <div className="pointer-events-none absolute inset-0 rounded-3xl bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.12),transparent_60%)] dark:bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.18),transparent_60%)]" />
                 <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -717,7 +766,7 @@ export default function HomePage() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-white/80 px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground shadow-[0_16px_40px_-32px_rgba(15,23,42,0.25)] dark:bg-slate-900/80">
+                  <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-white/80 px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground shadow-[0_16px_40px_-32px_rgba(15,23,42,0.25)] dark:border-white/10 dark:bg-slate-900/75 dark:text-slate-300">
                     <span
                       className={
                         isLoading
@@ -762,220 +811,182 @@ export default function HomePage() {
                 transition={{ duration: 0.4, ease: "easeOut" }}
               >
                 {activeFilter === "tudo" && (
-                  <section className="mx-auto w-full max-w-7xl space-y-10 px-4 pb-16 lg:px-8">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <Search className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Pesquisas recentes
-                      </p>
-                    </div>
-                    <RecentSearches
-                      items={recentSearches}
-                      onRepeat={handleRepeatSearch}
-                      onRemove={handleRemoveRecent}
-                      onAddFavorite={handleAddFavorite}
-                      onFirstSearchClick={handleScrollToSearchCard}
-                    />
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <ArrowRight className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Ofertas do dia
-                      </p>
-                    </div>
-                    <DailyDeals
-                      deals={dailyDeals}
-                      isLoadingDeals={false}
-                      onPickDeal={handlePickDeal}
-                      onAddFavorite={handleAddFavorite}
-                    />
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <MapPin className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Destinos populares
-                      </p>
-                    </div>
-                    <PopularDestinations
-                      items={popularDestinations}
-                      onSelect={handlePickDestination}
-                    />
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <Heart className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Favoritos
-                      </p>
-                    </div>
-                    <Favorites items={favorites} onRemove={handleRemoveFavorite} />
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <Bell className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Alertas de preco
-                      </p>
-                    </div>
-                    <PriceAlerts
-                      origin={origin}
-                      destination={destination}
-                      alerts={alerts}
-                      onCreate={handleCreateAlert}
-                      onToggle={handleToggleAlert}
-                      onRemove={handleRemoveAlert}
-                    />
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <Sparkles className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Recomendacoes
-                      </p>
-                    </div>
-                    <Recommendations
-                      personalized={personalizedRecommendations}
-                      general={generalSuggestions}
-                    />
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <Sparkles className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Premium
-                      </p>
-                    </div>
-                    <PremiumBanner />
+                  <section className="mx-auto grid w-full max-w-7xl gap-6 px-4 pb-16 lg:grid-cols-2 lg:px-8">
+                    <HomeSectionShell
+                      eyebrow="Histórico"
+                      title="Continue de onde você parou"
+                      description="Suas buscas e ofertas aparecem no mesmo contexto para facilitar a próxima decisão."
+                      icon={Search}
+                    >
+                      <div className="space-y-6">
+                        <RecentSearches
+                          items={recentSearches}
+                          onRepeat={handleRepeatSearch}
+                          onRemove={handleRemoveRecent}
+                          onAddFavorite={handleAddFavorite}
+                          onFirstSearchClick={handleScrollToSearchCard}
+                        />
+                        <DailyDeals
+                          deals={dailyDeals}
+                          isLoadingDeals={false}
+                          onPickDeal={handlePickDeal}
+                          onAddFavorite={handleAddFavorite}
+                        />
+                      </div>
+                    </HomeSectionShell>
+
+                    <HomeSectionShell
+                      eyebrow="Descoberta"
+                      title="Explore, salve e compare"
+                      description="Destinos em alta e favoritos ficam agrupados para o dark mode parecer um painel único."
+                      icon={MapPin}
+                    >
+                      <div className="space-y-6">
+                        <PopularDestinations
+                          items={popularDestinations}
+                          onSelect={handlePickDestination}
+                        />
+                        <Favorites
+                          items={favorites}
+                          onRemove={handleRemoveFavorite}
+                        />
+                      </div>
+                    </HomeSectionShell>
+
+                    <HomeSectionShell
+                      eyebrow="Monitoramento"
+                      title="Acompanhe os melhores momentos"
+                      description="Alertas e recomendações compartilham a mesma área para reforçar a sensação de acompanhamento contínuo."
+                      icon={Bell}
+                    >
+                      <div className="space-y-6">
+                        <PriceAlerts
+                          origin={origin}
+                          destination={destination}
+                          alerts={alerts}
+                          onCreate={handleCreateAlert}
+                          onToggle={handleToggleAlert}
+                          onRemove={handleRemoveAlert}
+                        />
+                        <Recommendations
+                          personalized={personalizedRecommendations}
+                          general={generalSuggestions}
+                        />
+                      </div>
+                    </HomeSectionShell>
+
+                    <HomeSectionShell
+                      eyebrow="Upgrade"
+                      title="Recursos premium em evidência"
+                      description="O bloco premium agora fecha a home com o mesmo peso visual dos outros grupos."
+                      icon={Sparkles}
+                    >
+                      <PremiumBanner />
+                    </HomeSectionShell>
                   </section>
                 )}
 
                 {activeFilter === "ofertas" && (
                   <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <ArrowRight className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Ofertas do dia
-                      </p>
-                    </div>
-                    <DailyDeals
-                      deals={dailyDeals}
-                      isLoadingDeals={false}
-                      onPickDeal={handlePickDeal}
-                      onAddFavorite={handleAddFavorite}
-                    />
+                    <HomeSectionShell
+                      eyebrow="Ofertas"
+                      title="Rotas em destaque hoje"
+                      description="Uma área dedicada para promoções, com o mesmo acabamento visual do restante da home."
+                      icon={ArrowRight}
+                    >
+                      <DailyDeals
+                        deals={dailyDeals}
+                        isLoadingDeals={false}
+                        onPickDeal={handlePickDeal}
+                        onAddFavorite={handleAddFavorite}
+                      />
+                    </HomeSectionShell>
                   </section>
                 )}
 
                 {activeFilter === "favoritos" && (
                   <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <Heart className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Favoritos
-                      </p>
-                    </div>
-                    <Favorites items={favorites} onRemove={handleRemoveFavorite} />
+                    <HomeSectionShell
+                      eyebrow="Favoritos"
+                      title="Rotas que merecem atenção"
+                      description="Seus atalhos ficam isolados em um container próprio e com mais contraste no dark."
+                      icon={Heart}
+                    >
+                      <Favorites
+                        items={favorites}
+                        onRemove={handleRemoveFavorite}
+                      />
+                    </HomeSectionShell>
                   </section>
                 )}
 
                 {activeFilter === "alertas" && (
                   <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <Bell className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Alertas de preco
-                      </p>
-                    </div>
-                    <PriceAlerts
-                      origin={origin}
-                      destination={destination}
-                      alerts={alerts}
-                      onCreate={handleCreateAlert}
-                      onToggle={handleToggleAlert}
-                      onRemove={handleRemoveAlert}
-                    />
+                    <HomeSectionShell
+                      eyebrow="Alertas"
+                      title="Monitore quedas de preço"
+                      description="A seção ganhou fundo e hierarquia próprios para não parecer um card solto no escuro."
+                      icon={Bell}
+                    >
+                      <PriceAlerts
+                        origin={origin}
+                        destination={destination}
+                        alerts={alerts}
+                        onCreate={handleCreateAlert}
+                        onToggle={handleToggleAlert}
+                        onRemove={handleRemoveAlert}
+                      />
+                    </HomeSectionShell>
                   </section>
                 )}
 
                 {activeFilter === "voos" && (
                   <section className="mx-auto w-full max-w-7xl space-y-10 px-4 pb-16 lg:px-8">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <Search className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Pesquisas recentes
-                      </p>
-                    </div>
-                    <RecentSearches
-                      items={recentSearches}
-                      onRepeat={handleRepeatSearch}
-                      onRemove={handleRemoveRecent}
-                      onAddFavorite={handleAddFavorite}
-                      onFirstSearchClick={handleScrollToSearchCard}
-                    />
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <ArrowRight className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Ofertas do dia
-                      </p>
-                    </div>
-                    <DailyDeals
-                      deals={dailyDeals}
-                      isLoadingDeals={false}
-                      onPickDeal={handlePickDeal}
-                      onAddFavorite={handleAddFavorite}
-                    />
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <MapPin className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Destinos populares
-                      </p>
-                    </div>
-                    <PopularDestinations
-                      items={popularDestinations}
-                      onSelect={handlePickDestination}
-                    />
+                    <HomeSectionShell
+                      eyebrow="Voos"
+                      title="Contexto completo para pesquisar"
+                      description="Mesmo filtrando voos, a home mantém o histórico e as oportunidades conectadas na mesma composição."
+                      icon={Search}
+                    >
+                      <div className="space-y-6">
+                        <RecentSearches
+                          items={recentSearches}
+                          onRepeat={handleRepeatSearch}
+                          onRemove={handleRemoveRecent}
+                          onAddFavorite={handleAddFavorite}
+                          onFirstSearchClick={handleScrollToSearchCard}
+                        />
+                        <DailyDeals
+                          deals={dailyDeals}
+                          isLoadingDeals={false}
+                          onPickDeal={handlePickDeal}
+                          onAddFavorite={handleAddFavorite}
+                        />
+                        <PopularDestinations
+                          items={popularDestinations}
+                          onSelect={handlePickDestination}
+                        />
+                      </div>
+                    </HomeSectionShell>
                   </section>
                 )}
 
                 {activeFilter === "hoteis" && (
                   <section className="mx-auto w-full max-w-7xl space-y-10 px-4 pb-16 lg:px-8">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <MapPin className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Destinos populares
-                      </p>
-                    </div>
-                    <PopularDestinations
-                      items={popularDestinations}
-                      onSelect={handlePickDestination}
-                    />
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <Sparkles className="h-4 w-4" />
-                      </span>
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-                        Premium
-                      </p>
-                    </div>
-                    <PremiumBanner />
+                    <HomeSectionShell
+                      eyebrow="Hospedagem"
+                      title="Descoberta e upgrade no mesmo fluxo"
+                      description="Os módulos de hotel agora vivem dentro de uma área única, reduzindo a sensação de recortes independentes."
+                      icon={MapPin}
+                    >
+                      <div className="space-y-6">
+                        <PopularDestinations
+                          items={popularDestinations}
+                          onSelect={handlePickDestination}
+                        />
+                        <PremiumBanner />
+                      </div>
+                    </HomeSectionShell>
                   </section>
                 )}
               </motion.div>
@@ -993,77 +1004,145 @@ export default function HomePage() {
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
               {activeFilter === "tudo" && (
-                <section className="mx-auto w-full max-w-7xl space-y-10 px-4 pb-16 lg:px-8">
-                  <RecentSearches
-                    items={recentSearches}
-                    onRepeat={handleRepeatSearch}
-                    onRemove={handleRemoveRecent}
-                    onAddFavorite={handleAddFavorite}
-                    onFirstSearchClick={handleScrollToSearchCard}
-                  />
-                  <DailyDeals
-                    deals={dailyDeals}
-                    isLoadingDeals={false}
-                    onPickDeal={handlePickDeal}
-                    onAddFavorite={handleAddFavorite}
-                  />
-                  <PopularDestinations
-                    items={popularDestinations}
-                    onSelect={handlePickDestination}
-                  />
-                  <Favorites items={favorites} onRemove={handleRemoveFavorite} />
-                  <PriceAlerts
-                    origin={origin}
-                    destination={destination}
-                    alerts={alerts}
-                    onCreate={handleCreateAlert}
-                    onToggle={handleToggleAlert}
-                    onRemove={handleRemoveAlert}
-                  />
-                  <Recommendations
-                    personalized={personalizedRecommendations}
-                    general={generalSuggestions}
-                  />
-                  <PremiumBanner />
+                <section className="mx-auto grid w-full max-w-7xl gap-6 px-4 pb-16 lg:grid-cols-2 lg:px-8">
+                  <HomeSectionShell
+                    eyebrow="Histórico"
+                    title="Ponto de partida da sua próxima viagem"
+                    description="Buscas recentes e ofertas ficam agrupadas logo abaixo do formulário para abrir a home com mais continuidade."
+                    icon={Search}
+                  >
+                    <div className="space-y-6">
+                      <RecentSearches
+                        items={recentSearches}
+                        onRepeat={handleRepeatSearch}
+                        onRemove={handleRemoveRecent}
+                        onAddFavorite={handleAddFavorite}
+                        onFirstSearchClick={handleScrollToSearchCard}
+                      />
+                      <DailyDeals
+                        deals={dailyDeals}
+                        isLoadingDeals={false}
+                        onPickDeal={handlePickDeal}
+                        onAddFavorite={handleAddFavorite}
+                      />
+                    </div>
+                  </HomeSectionShell>
+
+                  <HomeSectionShell
+                    eyebrow="Descoberta"
+                    title="Explore destinos e organize favoritos"
+                    description="Esses dois módulos passam a conversar dentro da mesma moldura visual."
+                    icon={MapPin}
+                  >
+                    <div className="space-y-6">
+                      <PopularDestinations
+                        items={popularDestinations}
+                        onSelect={handlePickDestination}
+                      />
+                      <Favorites
+                        items={favorites}
+                        onRemove={handleRemoveFavorite}
+                      />
+                    </div>
+                  </HomeSectionShell>
+
+                  <HomeSectionShell
+                    eyebrow="Inteligência"
+                    title="Acompanhe sinais e oportunidades"
+                    description="Alertas e sugestões agora compartilham o mesmo ritmo visual, o que ajuda no modo escuro."
+                    icon={Bell}
+                  >
+                    <div className="space-y-6">
+                      <PriceAlerts
+                        origin={origin}
+                        destination={destination}
+                        alerts={alerts}
+                        onCreate={handleCreateAlert}
+                        onToggle={handleToggleAlert}
+                        onRemove={handleRemoveAlert}
+                      />
+                      <Recommendations
+                        personalized={personalizedRecommendations}
+                        general={generalSuggestions}
+                      />
+                    </div>
+                  </HomeSectionShell>
+
+                  <HomeSectionShell
+                    eyebrow="Premium"
+                    title="Ferramentas avançadas em destaque"
+                    description="O fechamento da página ganhou uma área mais sólida para o banner premium não disputar atenção com os outros cards."
+                    icon={Sparkles}
+                  >
+                    <PremiumBanner />
+                  </HomeSectionShell>
                 </section>
               )}
 
               {activeFilter === "ofertas" && (
                 <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
-                  <DailyDeals
-                    deals={dailyDeals}
-                    isLoadingDeals={false}
-                    onPickDeal={handlePickDeal}
-                    onAddFavorite={handleAddFavorite}
-                  />
+                  <HomeSectionShell
+                    eyebrow="Ofertas"
+                    title="Promoções selecionadas para agora"
+                    description="Mantive o foco nas ofertas, mas com um container que conversa com o restante da home."
+                    icon={ArrowRight}
+                  >
+                    <DailyDeals
+                      deals={dailyDeals}
+                      isLoadingDeals={false}
+                      onPickDeal={handlePickDeal}
+                      onAddFavorite={handleAddFavorite}
+                    />
+                  </HomeSectionShell>
                 </section>
               )}
 
               {activeFilter === "favoritos" && (
                 <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
-                  <Favorites items={favorites} onRemove={handleRemoveFavorite} />
+                  <HomeSectionShell
+                    eyebrow="Favoritos"
+                    title="Suas rotas salvas"
+                    description="Os favoritos ficam sozinhos, mas sem perder a moldura visual do restante da experiência."
+                    icon={Heart}
+                  >
+                    <Favorites items={favorites} onRemove={handleRemoveFavorite} />
+                  </HomeSectionShell>
                 </section>
               )}
 
               {activeFilter === "alertas" && (
                 <section className="mx-auto w-full max-w-7xl space-y-8 px-4 pb-16 lg:px-8">
-                  <PriceAlerts
-                    origin={origin}
-                    destination={destination}
-                    alerts={alerts}
-                    onCreate={handleCreateAlert}
-                    onToggle={handleToggleAlert}
-                    onRemove={handleRemoveAlert}
-                  />
+                  <HomeSectionShell
+                    eyebrow="Alertas"
+                    title="Acompanhe preços com mais clareza"
+                    description="A seção ganhou estrutura própria e mais profundidade no dark mode."
+                    icon={Bell}
+                  >
+                    <PriceAlerts
+                      origin={origin}
+                      destination={destination}
+                      alerts={alerts}
+                      onCreate={handleCreateAlert}
+                      onToggle={handleToggleAlert}
+                      onRemove={handleRemoveAlert}
+                    />
+                  </HomeSectionShell>
                 </section>
               )}
 
               {(activeFilter === "voos" || activeFilter === "hoteis") && (
                 <section className="mx-auto w-full max-w-7xl px-4 pb-16 lg:px-8">
-                  <div className="rounded-3xl border border-border/60 bg-white/70 p-6 text-sm text-muted-foreground shadow-[0_18px_60px_-42px_rgba(15,23,42,0.2)] dark:bg-slate-900/70">
-                    Faça uma pesquisa para ver resultados de{" "}
-                    {activeFilter === "voos" ? "voos" : "hoteis"}.
-                  </div>
+                  <HomeSectionShell
+                    eyebrow={activeFilter === "voos" ? "Voos" : "Hospedagem"}
+                    title="Resultados aparecem depois da pesquisa"
+                    description="Esse estado vazio agora também segue a mesma linguagem visual da página."
+                    icon={activeFilter === "voos" ? Search : MapPin}
+                  >
+                    <div className="rounded-3xl border border-border/60 bg-white/70 p-6 text-sm text-muted-foreground shadow-[0_18px_60px_-42px_rgba(15,23,42,0.2)] dark:border-white/10 dark:bg-slate-900/75 dark:text-slate-400">
+                      Faça uma pesquisa para ver resultados de{" "}
+                      {activeFilter === "voos" ? "voos" : "hoteis"}.
+                    </div>
+                  </HomeSectionShell>
                 </section>
               )}
             </motion.div>
